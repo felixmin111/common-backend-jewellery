@@ -14,6 +14,7 @@ public class CategoryDto {
     @NotBlank(message = "Category name is required")
     private String name;
 
+    @NotBlank(message = "Description is required")
     @Size(max = 255, message = "Description cannot exceed 255 characters")
     private String description;
 
