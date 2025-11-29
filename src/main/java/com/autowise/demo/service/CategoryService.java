@@ -1,6 +1,7 @@
 package com.autowise.demo.service;
 
 import com.autowise.demo.dto.CategoryDto;
+import com.autowise.demo.exceptions.NotFoundException;
 import com.autowise.demo.mapper.CategoryMapper;
 import com.autowise.demo.model.Category;
 import com.autowise.demo.repository.CategoryRepository;
@@ -27,7 +28,7 @@ public class CategoryService {
 
     public CategoryDto getById(Long id) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found: " + id));
+                .orElseThrow(() -> new NotFoundException("Category not found: " + id));
         return categoryMapper.toDto(category);
     }
 

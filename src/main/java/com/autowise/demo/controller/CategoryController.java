@@ -1,6 +1,8 @@
 package com.autowise.demo.controller;
 
 import com.autowise.demo.dto.CategoryDto;
+import com.autowise.demo.exceptions.NotFoundException;
+import com.autowise.demo.model.Category;
 import com.autowise.demo.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
