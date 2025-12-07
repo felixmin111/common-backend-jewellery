@@ -4,36 +4,14 @@ import com.autowise.demo.dto.CategoryDto;
 import com.autowise.demo.model.Category;
 import org.springframework.stereotype.Component;
 
-@Component
-public class CategoryMapper {
+import com.autowise.demo.dto.CategoryDto;
+import com.autowise.demo.model.Category;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
-    public CategoryDto toDto(Category category) {
-        if (category == null) return null;
-
-        return CategoryDto.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .description(category.getDescription())
-                .code(category.getCode())
-                .build();
-    }
-
-    public Category toEntity(CategoryDto dto) {
-        if (dto == null) return null;
-
-        return Category.builder()
-                .id(dto.getId())
-                .name(dto.getName())
-                .description(dto.getDescription())
-                .code(dto.getCode())
-                .build();
-    }
-
-    public void updateEntityFromDto(CategoryDto dto, Category category) {
-        if (dto == null || category == null) return;
-
-        category.setName(dto.getName());
-        category.setDescription(dto.getDescription());
-        category.setCode(dto.getCode());
-    }
+@Mapper(componentModel = "spring")
+public interface CategoryMapper {
+    CategoryDto toDto(Category category);
+    Category toEntity(CategoryDto dto);
+    void updateEntityFromDto(CategoryDto dto, @MappingTarget Category category);
 }

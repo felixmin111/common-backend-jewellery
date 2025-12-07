@@ -1,6 +1,7 @@
 package com.autowise.demo.service;
 
 import com.autowise.demo.dto.*;
+import com.autowise.demo.mapper.UserMapper;
 import com.autowise.demo.model.User;
 import com.autowise.demo.repository.UserRepository;
 import com.autowise.demo.security.JwtService;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-
+    private final UserMapper userMapper;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -38,7 +39,6 @@ public class AuthService {
     }
 
     public UserDto login(LoginDto request) {
-        // authenticate email + password
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -56,7 +56,7 @@ public class AuthService {
                 .build();
 
         String token = jwtService.generateToken(userDetails);
-        UserDto userDto=new UserDto();
+        UserDto userDto=userMapper.toDto(user);
         userDto.setToken(token);
         return userDto;
     }
