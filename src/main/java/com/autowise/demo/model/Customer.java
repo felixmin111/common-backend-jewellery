@@ -31,5 +31,8 @@ public class Customer {
 
     @Column(name = "hashpassword", nullable = false)
     private String hashPassword;
+
+    @Column(length = 120)
+    private String gmail;
 }
 
