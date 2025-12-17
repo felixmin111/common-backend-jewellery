@@ -32,12 +32,13 @@ public class CraftService {
     }
 
     public CraftDto create(CraftDto request) {
+        System.out.println("DEBUG nrc = " + request.getNrc());
         Craft craft = craftMapper.toEntity(request);
         Craft saved = craftRepository.save(craft);
         return craftMapper.toDto(saved);
     }
 
-    // ✅ FIXED UPDATE
+
     public CraftDto update(Long id, CraftDto request) {
         Craft craft = craftRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Craft not found: " + id));
