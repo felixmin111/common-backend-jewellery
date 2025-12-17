@@ -19,7 +19,6 @@ public class CustomerDto {
     private String address;
     @NotBlank(message = "Role is required")
     private String role;
-    @NotBlank(message = "Password is required")
     @Size(min = 6, max = 50, message = "Password must be between 6 and 50 characters")
     private String password;
     @Email(message = "Invalid email format")

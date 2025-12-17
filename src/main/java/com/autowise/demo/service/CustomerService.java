@@ -39,7 +39,8 @@ public class CustomerService {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Customer not found: " + id));
         customerMapper.updateEntityFromDto(request, customer);
-        return customerMapper.toDto(customer);
+        Customer saved = customerRepository.save(customer);
+        return customerMapper.toDto(saved);
     }
 
     public void delete(Long id) {

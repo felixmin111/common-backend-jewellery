@@ -12,6 +12,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 public interface CustomerMapper {
 
     @Mapping(source = "hashPassword", target = "password")
+    @Mapping(source = "gmail", target = "gmail")
     CustomerDto toDto(Customer entity);
 
     @Mapping(source = "password", target = "hashPassword")
@@ -21,7 +22,7 @@ public interface CustomerMapper {
     // DTO -> existing Entity (for update, only non-null fields)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(source = "password", target = "hashPassword")
+    @Mapping(source = "gmail", target = "gmail")
     void updateEntityFromDto(CustomerDto dto, @MappingTarget Customer entity);
 
 }
-
