@@ -2,9 +2,9 @@ package com.autowise.demo.controller;
 
 import com.autowise.demo.dto.CraftDto;
 import com.autowise.demo.service.CraftService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,12 +28,18 @@ public class CraftController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CraftDto create(@Validated @RequestBody CraftDto request) {
+    public CraftDto create(@Valid @RequestBody CraftDto request) {
+
+        System.out.println("shopName = " + request.getShopName());
+        System.out.println("nrc      = " + request.getNrc());
+
         return craftService.create(request);
     }
 
+
+
     @PutMapping("/{id}")
-    public CraftDto update(@PathVariable Long id, @Validated @RequestBody CraftDto request) {
+    public CraftDto update(@PathVariable Long id, @Valid @RequestBody CraftDto request) {
         return craftService.update(id, request);
     }
 

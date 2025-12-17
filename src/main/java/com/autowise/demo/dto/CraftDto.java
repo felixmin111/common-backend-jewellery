@@ -1,23 +1,26 @@
 package com.autowise.demo.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CraftDto {
 
     private Long id;
 
+    @JsonProperty("shop_name")   // ✅ THIS FIXES THE PROBLEM
     @NotBlank(message = "Shop name is required")
     @Size(max = 30, message = "Shop name must be at most 30 characters")
     private String shopName;
 
-    @NotBlank(message = "NIC is required")
-    @Size(max = 30, message = "NIC must be at most 30 characters")
-    private String nic;
+    @NotBlank(message = "NRC is required")
+    @Size(max = 30, message = "NRC must be at most 30 characters")
+    private String nrc;
 
     @NotBlank(message = "Phone is required")
     @Size(max = 30, message = "Phone must be at most 30 characters")
