@@ -29,10 +29,6 @@ public class CraftController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CraftDto create(@Valid @RequestBody CraftDto request) {
-
-        System.out.println("shopName = " + request.getShopName());
-        System.out.println("nrc      = " + request.getNrc());
-
         return craftService.create(request);
     }
 

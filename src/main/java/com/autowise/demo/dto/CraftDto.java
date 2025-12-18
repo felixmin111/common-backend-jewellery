@@ -13,11 +13,12 @@ public class CraftDto {
 
     private Long id;
 
-    @JsonProperty("shop_name")   // ✅ THIS FIXES THE PROBLEM
+    @JsonProperty("shop_name")
     @NotBlank(message = "Shop name is required")
     @Size(max = 30, message = "Shop name must be at most 30 characters")
     private String shopName;
 
+    @JsonProperty("nrc")
     @NotBlank(message = "NRC is required")
     @Size(max = 30, message = "NRC must be at most 30 characters")
     private String nrc;
