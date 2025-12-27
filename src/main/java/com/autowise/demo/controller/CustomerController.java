@@ -33,7 +33,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public CustomerDto update(@PathVariable Long id,
+    public CustomerDto update(@PathVariable String id,
                                    @Validated @RequestBody CustomerDto request) {
         return customerService.update(id, request);
     }
