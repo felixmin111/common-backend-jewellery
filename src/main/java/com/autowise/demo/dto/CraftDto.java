@@ -13,7 +13,6 @@ public class CraftDto {
 
     private Long id;
 
-    @JsonProperty("shop_name")
     @NotBlank(message = "Shop name is required")
     @Size(max = 30, message = "Shop name must be at most 30 characters")
     private String shopName;

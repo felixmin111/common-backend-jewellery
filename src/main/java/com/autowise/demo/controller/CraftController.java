@@ -29,8 +29,10 @@ public class CraftController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CraftDto create(@Valid @RequestBody CraftDto request) {
+        System.out.println("DEBUG create request = " + request);
         return craftService.create(request);
     }
+
 
 
 
