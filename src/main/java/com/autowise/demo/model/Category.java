@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "categories")
+@Table(name = "category")
 @Getter
 @Setter
 @Builder
@@ -16,12 +16,15 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 90, nullable = false)
     private String name;
 
-    @Column(length = 255)
+    @Column(name = "description", length = 400)
     private String description;
 
-    @Column(nullable = false, length = 50, unique = true)
+    @Column(length = 100, nullable = false, unique = true)
     private String code;
+
+//    @Column(name = "image_url", length = 100)
+//    private String imageUrl;
 }

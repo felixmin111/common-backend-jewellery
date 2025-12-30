@@ -1,8 +1,6 @@
 package com.autowise.demo.controller;
 
 import com.autowise.demo.dto.CategoryDto;
-import com.autowise.demo.exceptions.NotFoundException;
-import com.autowise.demo.model.Category;
 import com.autowise.demo.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,8 +34,10 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public CategoryDto update(@PathVariable Long id,
-                              @Validated @RequestBody CategoryDto request) {
+    public CategoryDto update(
+            @PathVariable Long id,
+            @Validated @RequestBody CategoryDto request
+    ) {
         return categoryService.update(id, request);
     }
 
