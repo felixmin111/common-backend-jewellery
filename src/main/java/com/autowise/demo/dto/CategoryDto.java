@@ -11,14 +11,17 @@ public class CategoryDto {
 
     private Long id;
 
-    @NotBlank(message = "Category name is required")
+    @NotBlank(message = "Name is required")
+    @Size(max = 90, message = "Name must be at most 90 characters")
     private String name;
 
-    @NotBlank(message = "Description is required")
-    @Size(max = 255, message = "Description cannot exceed 255 characters")
+    @Size(max = 400, message = "Description must be at most 400 characters")
     private String description;
 
     @NotBlank(message = "Code is required")
-    @Size(max = 50, message = "Code must be 50 characters or less")
+    @Size(max = 100, message = "Code must be at most 100 characters")
     private String code;
+
+//    @Size(max = 100, message = "Image URL must be at most 100 characters")
+//    private String imageUrl;
 }
