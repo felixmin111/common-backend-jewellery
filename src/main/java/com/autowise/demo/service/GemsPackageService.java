@@ -18,9 +18,6 @@ public class GemsPackageService {
     private final GemsPackageMapper mapper;
     private final GemsPackageRepository repo;
     private final SellerService sellerService;
-
-
-    // ✅ needed to convert gemTypeId -> GemType entity
     private final GemTypeService gemTypeService;
 
     public List<GemsPackageDto> getAll() {
@@ -35,8 +32,6 @@ public class GemsPackageService {
 
     public GemsPackageDto create(GemsPackageDto request) {
         GemsPackage entity = mapper.toEntity(request);
-
-        // ✅ IMPORTANT: set relation from gemTypeId
         entity.setGemType(gemTypeService.requireEntity(request.getGemTypeId()));
         if (request.getSellerId() != null) {
             var seller = sellerService.requireEntity(request.getSellerId());
@@ -53,8 +48,6 @@ public class GemsPackageService {
                 .orElseThrow(() -> new RuntimeException("GemsPackage not found: " + id));
 
         mapper.updateEntityFromDto(request, entity);
-
-        // ✅ IMPORTANT: update relation too
         entity.setGemType(gemTypeService.requireEntity(request.getGemTypeId()));
 
         GemsPackage saved = repo.save(entity);
