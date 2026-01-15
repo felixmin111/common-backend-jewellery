@@ -1,6 +1,8 @@
 package com.autowise.demo.config;
 
 import com.autowise.demo.security.JwtAuthenticationFilter;
+import com.autowise.demo.security.RestAccessDeniedHandler;
+import com.autowise.demo.security.RestAuthEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.*;
 import org.springframework.http.HttpMethod;
@@ -37,7 +39,11 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(new RestAuthEntryPoint())   // 401
+                        .accessDeniedHandler(new RestAccessDeniedHandler())   // 403
+                );
 
         return http.build();
     }
