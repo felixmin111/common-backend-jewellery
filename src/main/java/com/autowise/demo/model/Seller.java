@@ -22,7 +22,7 @@ public class Seller {
     @Column(length = 30)
     private String phone;
 
-    @Column(length = 120)
+    @Column(length = 120, unique = true)
     private String email;
 
     @Column(length = 200)
