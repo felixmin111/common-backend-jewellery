@@ -26,4 +26,19 @@ public class SellerController {
     public SellerDto create(@Valid @RequestBody SellerDto request) {
         return service.create(request);
     }
+
+
+    @PutMapping("/{id}")
+    public SellerDto update(
+            @PathVariable Long id,
+            @Valid @RequestBody SellerDto request
+    ) {
+        return service.update(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        service.delete(id);
+    }
 }

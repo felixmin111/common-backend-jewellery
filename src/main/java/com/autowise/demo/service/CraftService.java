@@ -30,9 +30,32 @@ public class CraftService {
                 .orElseThrow(() -> new RuntimeException("Craft not found: " + id));
         return craftMapper.toDto(craft);
     }
+    private String normalizeDuplicate(String value) {
+        if (value == null) return null;
+
+        value = value.trim();
+
+        int len = value.length();
+        if (len % 2 == 0) {
+            String half = value.substring(0, len / 2);
+            if ((half + half).equals(value)) {
+                return half;
+            }
+        }
+        return value;
+    }
 
     public CraftDto create(CraftDto request) {
-        System.out.println("DEBUG nrc = " + request.getNrc());
+        request.setNrc(normalizeDuplicate(request.getNrc()));
+        request.setPhone(normalizeDuplicate(request.getPhone()));
+
+        if (craftRepository.existsByNrc(request.getNrc())) {
+            throw new RuntimeException("Craft with this NRC already exists: " + request.getNrc());
+        }
+        if (craftRepository.existsByPhone(request.getPhone())) {
+            throw new RuntimeException("Craft with this phone already exists: " + request.getPhone());
+        }
+
         Craft craft = craftMapper.toEntity(request);
         Craft saved = craftRepository.save(craft);
         return craftMapper.toDto(saved);
@@ -43,9 +66,21 @@ public class CraftService {
         Craft craft = craftRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Craft not found: " + id));
 
+        // 🔒 normalize before mapping
+        request.setNrc(normalizeDuplicate(request.getNrc()));
+        request.setPhone(normalizeDuplicate(request.getPhone()));
+
+        System.out.println("DEBUG before update (db) nrc=" + craft.getNrc() + " phone=" + craft.getPhone());
+        System.out.println("DEBUG incoming (update) nrc=" + request.getNrc() + " phone=" + request.getPhone());
+
         craftMapper.updateEntityFromDto(request, craft);
 
+        System.out.println("DEBUG after mapper (update) nrc=" + craft.getNrc() + " phone=" + craft.getPhone());
+
         Craft saved = craftRepository.save(craft);
+
+        System.out.println("DEBUG saved (update) nrc=" + saved.getNrc() + " phone=" + saved.getPhone());
+
         return craftMapper.toDto(saved);
     }
 
