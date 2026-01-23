@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 public class UserDto {
+
     @NotBlank
     private String name;
 
@@ -14,7 +15,7 @@ public class UserDto {
     @Email
     private String email;
 
-    @NotBlank
+    // ⚠️ If you use UserDto as a response too, remove @NotBlank here
     private String password;
 
     @Column(unique = true)
@@ -22,5 +23,7 @@ public class UserDto {
     @Column(nullable = false, unique = true)
     private String phone;
     private String address;
+
+    private String role;   // ✅ ADD THIS
     private String token;
 }
