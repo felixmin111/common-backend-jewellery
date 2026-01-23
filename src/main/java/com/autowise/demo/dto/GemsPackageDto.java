@@ -44,6 +44,15 @@ public class GemsPackageDto {
     @Size(max = 90, message = "Seller name must be at most 90 characters")
     private String sellerName;
 
+    @Positive(message = "Quantity must be positive")
+    private Integer quantity;
+
+    @PositiveOrZero(message = "Unit price must be 0 or positive")
+    private Double unitPrice;
+
+    @PositiveOrZero(message = "Total price must be 0 or positive")
+    private Double totalPrice;
+
     @NotNull(message = "Gem type is required")
     @Positive(message = "Gem type must be a valid id")
     private Long gemTypeId;
