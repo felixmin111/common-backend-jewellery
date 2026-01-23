@@ -2,10 +2,12 @@ package com.autowise.demo.config;
 
 import com.autowise.demo.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.*;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,19 +18,31 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @RequiredArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                   AuthenticationProvider authenticationProvider) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            AuthenticationProvider authenticationProvider
+    ) throws Exception {
 
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // ✅ public
                         .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
+
+                        // ✅ Product Tags ADMIN only
+                        .requestMatchers("/api/product-tags/**").hasRole("ADMIN")
+
+                        // ✅ admin register protected
+                        .requestMatchers("/api/admin/register").hasRole("ADMIN")
+
+                        // ✅ everything else needs auth
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider)
@@ -38,8 +52,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService,
-                                                         PasswordEncoder passwordEncoder) {
+    public AuthenticationProvider authenticationProvider(
+            UserDetailsService userDetailsService,
+            PasswordEncoder passwordEncoder
+    ) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder);

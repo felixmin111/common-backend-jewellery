@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class UserDto {
+public class AdminRegisterDto {
 
     @NotBlank
     private String name;
@@ -14,13 +14,6 @@ public class UserDto {
     @Email
     private String email;
 
-    // ⚠️ If you use UserDto as a response too, remove @NotBlank here
+    @NotBlank
     private String password;
-
-    private String nrc;
-    private String phone;
-    private String address;
-
-    private String role;   // ✅ ADD THIS
-    private String token;
 }
