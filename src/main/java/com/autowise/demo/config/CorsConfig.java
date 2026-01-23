@@ -14,8 +14,12 @@ import java.util.List;
 @Configuration
 public class CorsConfig {
 
-    @Value("${app.cors.allowed-origins}")
+    @Value("${app.cors.allowed-origins:http://localhost:5173}")
     private String allowedOrigins;
+
+    private String[] origins() {
+        return allowedOrigins.split("\\s*,\\s*"); // supports "a,b,c"
+    }
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
@@ -23,8 +27,8 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins(allowedOrigins)
-                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+                        .allowedOrigins(origins())
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
             }
@@ -34,7 +38,7 @@ public class CorsConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(allowedOrigins));
+        config.setAllowedOrigins(List.of(origins()));
         config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
