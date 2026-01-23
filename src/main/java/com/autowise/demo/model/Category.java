@@ -3,6 +3,9 @@ package com.autowise.demo.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "category")
 @Getter
@@ -25,6 +28,8 @@ public class Category {
     @Column(length = 100, nullable = false, unique = true)
     private String code;
 
-//    @Column(name = "image_url", length = 100)
-//    private String imageUrl;
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<JewelryType> types = new ArrayList<>();
+
 }

@@ -47,8 +47,27 @@ public class GemsPackageService {
         GemsPackage entity = repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("GemsPackage not found: " + id));
 
+        // 1) update normal fields (name, price, etc.)
         mapper.updateEntityFromDto(request, entity);
+
+        // 2) gem type is required (NOT NULL FK)
         entity.setGemType(gemTypeService.requireEntity(request.getGemTypeId()));
+
+        // 3) ✅ FIX2: seller update (confirm / clear)
+        if (request.getSellerId() != null) {
+            var seller = sellerService.requireEntity(request.getSellerId());
+            entity.setSellerId(seller.getId());
+            entity.setSellerName(seller.getName());
+        } else {
+            // if user removed seller, clear both fields
+            entity.setSellerId(null);
+            entity.setSellerName(null);
+        }
+
+        // 4) ✅ FIX3: calculate total price (don’t trust frontend)
+        if (entity.getQuantity() != null && entity.getUnitPrice() != null) {
+            entity.setTotalPrice(entity.getQuantity() * entity.getUnitPrice());
+        }
 
         GemsPackage saved = repo.save(entity);
         return mapper.toDto(saved);

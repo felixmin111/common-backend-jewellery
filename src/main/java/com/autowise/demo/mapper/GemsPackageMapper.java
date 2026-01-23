@@ -14,6 +14,7 @@ public interface GemsPackageMapper {
     @Mapping(target = "gemType", ignore = true)
     GemsPackage toEntity(GemsPackageDto dto);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "gemType", ignore = true)
     void updateEntityFromDto(GemsPackageDto dto, @MappingTarget GemsPackage entity);

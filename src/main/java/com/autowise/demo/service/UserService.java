@@ -38,6 +38,14 @@ public class UserService {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email already exists: " + request.getEmail());
         }
+        if (request.getPhone() != null && !request.getPhone().isBlank()
+                && userRepository.existsByPhone(request.getPhone())) {
+            throw new RuntimeException("Phone already exists: " + request.getPhone());
+        }
+        if (request.getNrc() != null && !request.getNrc().isBlank()
+                && userRepository.existsByNrc(request.getNrc().trim())) {
+            throw new RuntimeException("NRC already exists: " + request.getNrc());
+        }
 
         User user = userMapper.toEntity(request);
 
@@ -55,6 +63,18 @@ public class UserService {
         // if email is being changed, prevent duplicates
         if (!user.getEmail().equals(request.getEmail()) && userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email already exists: " + request.getEmail());
+        }
+        if (request.getPhone() != null && !request.getPhone().isBlank()
+                && userRepository.existsByPhoneAndIdNot(request.getPhone(), id)) {
+            throw new RuntimeException("Phone already exists: " + request.getPhone());
+        }
+        String incomingNrc = request.getNrc() == null ? null : request.getNrc().trim();
+        if (incomingNrc != null && !incomingNrc.isBlank()) {
+            userRepository.findByNrc(incomingNrc).ifPresent(existing -> {
+                if (!existing.getId().equals(id)) {
+                    throw new RuntimeException("NRC already exists: " + incomingNrc);
+                }
+            });
         }
 
         userMapper.updateEntityFromDto(request, user);

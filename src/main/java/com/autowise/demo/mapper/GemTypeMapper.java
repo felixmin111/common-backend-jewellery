@@ -9,6 +9,7 @@ public interface GemTypeMapper {
     GemTypeDto toDto(GemType entity);
     GemType toEntity(GemTypeDto dto);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     void updateEntityFromDto(GemTypeDto dto, @MappingTarget GemType entity);
 }

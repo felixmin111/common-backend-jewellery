@@ -54,6 +54,15 @@ public class GemsPackage {
     @Column(name = "seller_name", length = 90)
     private String sellerName;
 
+    @Column(name = "quantity")
+    private Integer quantity;
+
+    @Column(name = "unit_price")
+    private Double unitPrice;
+
+    @Column(name = "total_price")
+    private Double totalPrice;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "gem_type_id", nullable = false)
     private GemType gemType;
