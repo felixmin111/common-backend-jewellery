@@ -31,12 +31,33 @@ public class GemsPackageService {
     }
 
     public GemsPackageDto create(GemsPackageDto request) {
+
+        // ✅ 1. Check package number uniqueness
+        if (request.getPackageNumber() != null &&
+                repo.existsByPackageNumber(request.getPackageNumber())) {
+            throw new IllegalArgumentException(
+                    "Package number already exists: " + request.getPackageNumber()
+            );
+        }
+
+        // ✅ 2. Map DTO → Entity (manual totalPrice preserved)
         GemsPackage entity = mapper.toEntity(request);
+
+        // ✅ 3. Required relations
         entity.setGemType(gemTypeService.requireEntity(request.getGemTypeId()));
+
+        // ✅ 4. Seller (optional)
         if (request.getSellerId() != null) {
             var seller = sellerService.requireEntity(request.getSellerId());
             entity.setSellerId(seller.getId());
             entity.setSellerName(seller.getName());
+        }
+
+        // ✅ 5. Auto-calc ONLY if user did NOT input totalPrice
+        if (request.getTotalPrice() == null &&
+                entity.getQuantity() != null &&
+                entity.getUnitPrice() != null) {
+            entity.setTotalPrice(entity.getQuantity() * entity.getUnitPrice());
         }
 
         GemsPackage saved = repo.save(entity);
@@ -44,28 +65,38 @@ public class GemsPackageService {
     }
 
     public GemsPackageDto update(Long id, GemsPackageDto request) {
+
         GemsPackage entity = repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("GemsPackage not found: " + id));
 
-        // 1) update normal fields (name, price, etc.)
+        // ✅ 1. Package number uniqueness (ignore itself)
+        if (request.getPackageNumber() != null &&
+                repo.existsByPackageNumberAndIdNot(request.getPackageNumber(), id)) {
+            throw new IllegalArgumentException(
+                    "Package number already exists: " + request.getPackageNumber()
+            );
+        }
+
+        // ✅ 2. Update normal fields (manual totalPrice included)
         mapper.updateEntityFromDto(request, entity);
 
-        // 2) gem type is required (NOT NULL FK)
+        // ✅ 3. Required gem type
         entity.setGemType(gemTypeService.requireEntity(request.getGemTypeId()));
 
-        // 3) ✅ FIX2: seller update (confirm / clear)
+        // ✅ 4. Seller update / clear
         if (request.getSellerId() != null) {
             var seller = sellerService.requireEntity(request.getSellerId());
             entity.setSellerId(seller.getId());
             entity.setSellerName(seller.getName());
         } else {
-            // if user removed seller, clear both fields
             entity.setSellerId(null);
             entity.setSellerName(null);
         }
 
-        // 4) ✅ FIX3: calculate total price (don’t trust frontend)
-        if (entity.getQuantity() != null && entity.getUnitPrice() != null) {
+        // ✅ 5. Auto-calc ONLY if user did NOT input totalPrice
+        if (request.getTotalPrice() == null &&
+                entity.getQuantity() != null &&
+                entity.getUnitPrice() != null) {
             entity.setTotalPrice(entity.getQuantity() * entity.getUnitPrice());
         }
 
