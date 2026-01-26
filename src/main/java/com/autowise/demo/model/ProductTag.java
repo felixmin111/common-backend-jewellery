@@ -1,4 +1,3 @@
-// src/main/java/com/autowise/demo/model/ProductTag.java
 package com.autowise.demo.model;
 
 import jakarta.persistence.*;
