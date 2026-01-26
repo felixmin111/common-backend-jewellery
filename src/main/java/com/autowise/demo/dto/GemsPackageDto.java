@@ -1,5 +1,6 @@
 package com.autowise.demo.dto;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -17,6 +18,7 @@ public class GemsPackageDto {
     @Size(max = 400, message = "Name must be at most 400 characters")
     private String name;
 
+    @NotNull(message = "Package number is required")
     private Long packageNumber;
 
     @PositiveOrZero(message = "Gems size must be 0 or positive")

@@ -21,7 +21,7 @@ public class GemsPackage {
     @Column(length = 400, nullable = false)
     private String name;
 
-    @Column(name = "package_number")
+    @Column(name = "package_number", unique = true)
     private Long packageNumber;
 
     @Column(name = "gems_size")
