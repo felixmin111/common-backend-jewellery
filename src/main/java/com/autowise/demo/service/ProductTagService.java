@@ -1,4 +1,3 @@
-// src/main/java/com/autowise/demo/service/ProductTagService.java
 package com.autowise.demo.service;
 
 import com.autowise.demo.dto.ProductTagDto;
@@ -14,31 +13,59 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductTagService {
 
-    private final ProductTagRepository repository;
+    private final ProductTagRepository repo;
     private final ProductTagMapper mapper;
 
     public List<ProductTagDto> findAll() {
-        return mapper.toDtoList(repository.findAll());
+        return repo.findAll().stream().map(mapper::toDto).toList();
     }
 
-    public ProductTagDto create(ProductTagDto dto) {
-        if (repository.existsByName(dto.getName())) {
-            throw new RuntimeException("Product tag already exists");
-        }
+    public ProductTagDto create(ProductTagDto req) {
+        String name = req.getName() == null ? "" : req.getName().trim();
+        String desc = req.getDescription() == null ? null : req.getDescription().trim();
 
-        ProductTag entity = mapper.toEntity(dto);
-        return mapper.toDto(repository.save(entity));
+        if (name.isBlank()) throw new RuntimeException("Tag name is required");
+        if (repo.existsByNameIgnoreCase(name)) throw new RuntimeException("Tag name already exists");
+
+        ProductTag entity = ProductTag.builder()
+                .name(name)
+                .description(desc != null && desc.isBlank() ? null : desc)
+                .build();
+
+        ProductTag saved = repo.save(entity);
+        return mapper.toDto(saved);
     }
 
-    public ProductTagDto update(Long id, ProductTagDto dto) {
-        ProductTag entity = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product tag not found"));
+    public ProductTagDto update(Long id, ProductTagDto req) {
+        String name = req.getName() == null ? "" : req.getName().trim();
+        String desc = req.getDescription() == null ? null : req.getDescription().trim();
 
-        mapper.updateEntityFromDto(dto, entity);
-        return mapper.toDto(repository.save(entity));
+        if (name.isBlank()) throw new RuntimeException("Tag name is required");
+
+        ProductTag tag = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tag not found"));
+
+        // unique check (ignore itself)
+        repo.findByNameIgnoreCase(name).ifPresent(existing -> {
+            if (!existing.getId().equals(id)) {
+                throw new RuntimeException("Tag name already exists");
+            }
+        });
+
+        // use mapper update
+        ProductTagDto cleanDto = ProductTagDto.builder()
+                .name(name)
+                .description(desc != null && desc.isBlank() ? null : desc)
+                .build();
+
+        mapper.updateEntityFromDto(cleanDto, tag);
+
+        ProductTag saved = repo.save(tag);
+        return mapper.toDto(saved);
     }
 
     public void delete(Long id) {
-        repository.deleteById(id);
+        if (!repo.existsById(id)) throw new RuntimeException("Tag not found");
+        repo.deleteById(id);
     }
 }

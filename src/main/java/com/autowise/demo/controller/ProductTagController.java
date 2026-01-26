@@ -1,4 +1,3 @@
-// src/main/java/com/autowise/demo/controller/ProductTagController.java
 package com.autowise.demo.controller;
 
 import com.autowise.demo.dto.ProductTagDto;
@@ -9,9 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/product-tags")
 @RequiredArgsConstructor
-@CrossOrigin
+@RequestMapping("/api/product-tags")
 public class ProductTagController {
 
     private final ProductTagService service;
@@ -22,16 +20,13 @@ public class ProductTagController {
     }
 
     @PostMapping
-    public ProductTagDto create(@RequestBody ProductTagDto dto) {
-        return service.create(dto);
+    public ProductTagDto create(@RequestBody ProductTagDto req) {
+        return service.create(req);
     }
 
     @PutMapping("/{id}")
-    public ProductTagDto update(
-            @PathVariable Long id,
-            @RequestBody ProductTagDto dto
-    ) {
-        return service.update(id, dto);
+    public ProductTagDto update(@PathVariable Long id, @RequestBody ProductTagDto req) {
+        return service.update(id, req);
     }
 
     @DeleteMapping("/{id}")
