@@ -29,6 +29,7 @@ public class CustomerService {
                 .orElseThrow(() -> new RuntimeException("Customer not found: " + id));
         return customerMapper.toDto(customer);
     }
+
     public CustomerDto create(CustomerDto request) {
         Customer customer = customerMapper.toEntity(request);
         Customer saved = customerRepository.save(customer);
@@ -36,7 +37,7 @@ public class CustomerService {
     }
 
     public CustomerDto update(String idStr, CustomerDto request) {
-        Long id=Long.parseLong(idStr);
+        Long id = Long.parseLong(idStr);
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Customer not found: " + id));
         customerMapper.updateEntityFromDto(request, customer);

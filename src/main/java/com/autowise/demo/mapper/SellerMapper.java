@@ -2,7 +2,9 @@ package com.autowise.demo.mapper;
 
 import com.autowise.demo.dto.SellerDto;
 import com.autowise.demo.model.Seller;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface SellerMapper {

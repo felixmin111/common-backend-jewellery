@@ -8,4 +8,5 @@ public record JewelryTypeDto(
         @NotBlank String name,
         @NotNull Long categoryId,
         String categoryName // helpful for UI (optional from client)
-) {}
+) {
+}

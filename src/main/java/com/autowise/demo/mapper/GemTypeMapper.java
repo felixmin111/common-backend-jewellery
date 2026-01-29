@@ -7,6 +7,7 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface GemTypeMapper {
     GemTypeDto toDto(GemType entity);
+
     GemType toEntity(GemTypeDto dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
