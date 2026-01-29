@@ -4,7 +4,6 @@ import com.autowise.demo.security.JwtAuthenticationFilter;
 import com.autowise.demo.security.RestAccessDeniedHandler;
 import com.autowise.demo.security.RestAuthEntryPoint;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpMethod;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

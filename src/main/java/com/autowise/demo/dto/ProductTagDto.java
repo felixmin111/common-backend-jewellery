@@ -2,7 +2,8 @@ package com.autowise.demo.dto;
 
 import lombok.*;
 
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

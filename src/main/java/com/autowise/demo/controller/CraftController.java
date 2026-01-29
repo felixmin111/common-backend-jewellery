@@ -34,8 +34,6 @@ public class CraftController {
     }
 
 
-
-
     @PutMapping("/{id}")
     public CraftDto update(@PathVariable Long id, @Valid @RequestBody CraftDto request) {
         return craftService.update(id, request);

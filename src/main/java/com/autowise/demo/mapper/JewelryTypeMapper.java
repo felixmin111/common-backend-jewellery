@@ -7,7 +7,8 @@ import com.autowise.demo.model.JewelryType;
 
 public class JewelryTypeMapper {
 
-    private JewelryTypeMapper() {}
+    private JewelryTypeMapper() {
+    }
 
     public static JewelryTypeDto toDto(JewelryType e) {
         return new JewelryTypeDto(

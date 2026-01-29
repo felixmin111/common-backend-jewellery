@@ -9,6 +9,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface CraftMapper {
     CraftDto toDto(Craft entity);
+
     Craft toEntity(CraftDto dto);
 
     @Mapping(target = "id", ignore = true)

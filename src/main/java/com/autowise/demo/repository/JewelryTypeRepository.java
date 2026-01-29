@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface JewelryTypeRepository extends JpaRepository<JewelryType, Long> {
     List<JewelryType> findAllByCategoryIdOrderByNameAsc(Long categoryId);
+
     boolean existsByCategoryIdAndNameIgnoreCase(Long categoryId, String name);
 }

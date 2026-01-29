@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface ProductTagRepository extends JpaRepository<ProductTag, Long> {
     Optional<ProductTag> findByNameIgnoreCase(String name);
+
     boolean existsByNameIgnoreCase(String name);
 }

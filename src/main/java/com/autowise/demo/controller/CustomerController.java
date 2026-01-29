@@ -28,13 +28,13 @@ public class CustomerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CustomerDto create( @RequestBody CustomerDto request) {
+    public CustomerDto create(@RequestBody CustomerDto request) {
         return customerService.create(request);
     }
 
     @PutMapping("/{id}")
     public CustomerDto update(@PathVariable String id,
-                                   @Validated @RequestBody CustomerDto request) {
+                              @Validated @RequestBody CustomerDto request) {
         return customerService.update(id, request);
     }
 

@@ -2,7 +2,10 @@ package com.autowise.demo.mapper;
 
 import com.autowise.demo.dto.ProductTagDto;
 import com.autowise.demo.model.ProductTag;
-import org.mapstruct.*;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring")
 public interface ProductTagMapper {

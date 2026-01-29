@@ -10,6 +10,7 @@ import org.mapstruct.MappingTarget;
 public interface ProductMapper {
 
     ProductDto toDto(Product entity);
+
     Product toEntity(ProductDto dto);
 
     @Mapping(target = "id", ignore = true)

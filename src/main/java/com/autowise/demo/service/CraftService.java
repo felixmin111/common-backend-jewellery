@@ -30,6 +30,7 @@ public class CraftService {
                 .orElseThrow(() -> new RuntimeException("Craft not found: " + id));
         return craftMapper.toDto(craft);
     }
+
     private String normalizeDuplicate(String value) {
         if (value == null) return null;
 
