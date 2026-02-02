@@ -1,20 +1,20 @@
 package com.autowise.demo.mapper;
 
-import com.autowise.demo.dto.ProductDto;
-import com.autowise.demo.model.Product;
+import com.autowise.demo.dto.GoldSourceDto;
+import com.autowise.demo.model.GoldSource;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
-public interface ProductMapper {
+public interface GoldSourceMapper {
 
-    ProductDto toDto(Product entity);
+    GoldSourceDto toDto(GoldSource entity);
 
-    Product toEntity(ProductDto dto);
+    GoldSource toEntity(GoldSourceDto dto);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    void updateEntityFromDto(ProductDto dto, @MappingTarget Product entity);
+    void updateEntityFromDto(GoldSourceDto dto, @MappingTarget GoldSource entity);
 }
