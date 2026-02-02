@@ -1,35 +1,53 @@
 package com.autowise.demo.model;
 
 
+import com.autowise.demo.model.enums.CustomerStatus;
+import com.autowise.demo.model.enums.CustomerType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "customers")
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 120)
     private String name;
 
-    @Column(length = 20, nullable = false, unique = true)
+    @Column(nullable = false, length = 30, unique = true)
     private String phone;
 
-    @Column(length = 255)
+    @Column(length = 120)
+    private String email;
+
+    @Column(columnDefinition = "TEXT")
     private String address;
 
-    @Column(length = 50, nullable = false)
-    private String role;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CustomerType customerType;
 
-    @Column(name = "hashpassword", nullable = false)
-    private String hashPassword;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CustomerStatus status;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 }
 
