@@ -14,40 +14,59 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class CustomerService {
-    private final CustomerMapper customerMapper;
-    private final CustomerRepository customerRepository;
+
+    private final CustomerRepository repo;
+    private final CustomerMapper mapper;
 
     public List<CustomerDto> getAll() {
-        return customerRepository.findAll()
-                .stream()
-                .map(customerMapper::toDto)
-                .toList();
+        return repo.findAll().stream().map(mapper::toDto).toList();
     }
 
     public CustomerDto getById(Long id) {
-        Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Customer not found: " + id));
-        return customerMapper.toDto(customer);
-    }
-    public CustomerDto create(CustomerDto request) {
-        Customer customer = customerMapper.toEntity(request);
-        Customer saved = customerRepository.save(customer);
-        return customerMapper.toDto(saved);
+        return mapper.toDto(requireEntity(id));
     }
 
-    public CustomerDto update(String idStr, CustomerDto request) {
-        Long id=Long.parseLong(idStr);
-        Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Customer not found: " + id));
-        customerMapper.updateEntityFromDto(request, customer);
-        return customerMapper.toDto(customer);
+    public CustomerDto create(CustomerDto req) {
+        // normalize
+        req.setName(req.getName() == null ? null : req.getName().trim());
+        req.setPhone(req.getPhone() == null ? null : req.getPhone().trim());
+        req.setEmail(req.getEmail() == null ? null : req.getEmail().trim());
+
+        if (repo.existsByPhone(req.getPhone())) {
+            throw new IllegalArgumentException("Phone already exists: " + req.getPhone());
+        }
+
+        Customer entity = mapper.toEntity(req);
+        Customer saved = repo.save(entity);
+        return mapper.toDto(saved);
+    }
+
+    public CustomerDto update(Long id, CustomerDto req) {
+        Customer entity = requireEntity(id);
+
+        // normalize
+        if (req.getName() != null) req.setName(req.getName().trim());
+        if (req.getPhone() != null) req.setPhone(req.getPhone().trim());
+        if (req.getEmail() != null) req.setEmail(req.getEmail().trim());
+
+        // if phone changed, check unique
+        if (req.getPhone() != null && repo.existsByPhoneAndIdNot(req.getPhone(), id)) {
+            throw new IllegalArgumentException("Phone already exists: " + req.getPhone());
+        }
+
+        mapper.updateEntityFromDto(req, entity);
+
+        Customer saved = repo.save(entity);
+        return mapper.toDto(saved);
     }
 
     public void delete(Long id) {
-        if (!customerRepository.existsById(id)) {
-            throw new RuntimeException("Customer not found: " + id);
-        }
-        customerRepository.deleteById(id);
+        if (!repo.existsById(id)) throw new RuntimeException("Customer not found: " + id);
+        repo.deleteById(id);
     }
 
+    public Customer requireEntity(Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Customer not found: " + id));
+    }
 }
