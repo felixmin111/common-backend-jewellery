@@ -2,7 +2,6 @@ package com.autowise.demo.model;
 
 import com.autowise.demo.model.enums.GoldPriceStatus;
 import com.autowise.demo.model.enums.GoldPurity;
-import com.autowise.demo.model.enums.GoldUnit;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -32,9 +31,7 @@ public class GoldPriceHistory {
     @Column(nullable = false)
     private GoldPurity purity;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private GoldUnit unit;
+
 
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal buyPrice;
