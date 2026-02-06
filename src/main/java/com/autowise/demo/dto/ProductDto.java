@@ -1,9 +1,12 @@
 package com.autowise.demo.dto;
 
+import com.autowise.demo.model.ProductGold;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+
+import java.util.Set;
 
 @Data
 @Builder
@@ -49,4 +52,8 @@ public class ProductDto {
     private Float depreciation;
 
     private Long productTypeId;
+
+    private Set<ProductGold> productGolds;
+
+    private Set<ProductJewelleryDto> productJewellerys;
 }
