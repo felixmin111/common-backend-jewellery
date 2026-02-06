@@ -26,44 +26,24 @@ public class ProductService {
     }
 
     public ProductDto getById(Long id) {
-        Product product = productRepository.findById(id)
+        Product p = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found: " + id));
-        return productMapper.toDto(product);
+        return productMapper.toDto(p);
     }
 
     public ProductDto create(ProductDto request) {
-        request.setName(trimOrNull(request.getName()));
-        request.setCode(trimOrNull(request.getCode()));
-        request.setStockStatus(trimOrNull(request.getStockStatus()));
-        request.setDesc(trimOrNull(request.getDesc()));
-        request.setCollection(trimOrNull(request.getCollection()));
-        request.setShortDesc(trimOrNull(request.getShortDesc()));
-        request.setColor(trimOrNull(request.getColor()));
-
-        if (productRepository.existsByName(request.getName())) {
-            throw new RuntimeException("Product with this name already exists: " + request.getName());
-        }
-
         Product entity = productMapper.toEntity(request);
         Product saved = productRepository.save(entity);
         return productMapper.toDto(saved);
     }
 
     public ProductDto update(Long id, ProductDto request) {
-        Product product = productRepository.findById(id)
+        Product existing = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found: " + id));
 
-        request.setName(trimOrNull(request.getName()));
-        request.setCode(trimOrNull(request.getCode()));
-        request.setStockStatus(trimOrNull(request.getStockStatus()));
-        request.setDesc(trimOrNull(request.getDesc()));
-        request.setCollection(trimOrNull(request.getCollection()));
-        request.setShortDesc(trimOrNull(request.getShortDesc()));
-        request.setColor(trimOrNull(request.getColor()));
+        productMapper.updateEntityFromDto(request, existing);
 
-        productMapper.updateEntityFromDto(request, product);
-
-        Product saved = productRepository.save(product);
+        Product saved = productRepository.save(existing);
         return productMapper.toDto(saved);
     }
 
@@ -72,11 +52,5 @@ public class ProductService {
             throw new RuntimeException("Product not found: " + id);
         }
         productRepository.deleteById(id);
-    }
-
-    private String trimOrNull(String s) {
-        if (s == null) return null;
-        s = s.trim();
-        return s.isEmpty() ? null : s;
     }
 }

@@ -3,6 +3,8 @@ package com.autowise.demo.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "product")
 @Getter
@@ -25,11 +27,11 @@ public class Product {
     @Column(name = "stock_status", length = 20)
     private String stockStatus;
 
-    @Column(name = "description", length = 300)
+    // ✅ Postgres keyword: use quoted column name
+    @Column(name = "\"desc\"", length = 300)
     private String desc;
 
-
-    private Integer qty;
+    private Long qty;
 
     @Column(length = 50)
     private String collection;
@@ -37,7 +39,7 @@ public class Product {
     @Column(name = "short_desc", length = 100)
     private String shortDesc;
 
-    @Column(length = 100)
+    @Column(length = 60)
     private String color;
 
     private Float weight;
@@ -49,8 +51,28 @@ public class Product {
     private Float makingCost;
 
     @Column(name = "color_count")
-    private Integer colorCount;
+    private Long colorCount;
 
-    @Column(name = "product_type_id", nullable = false)
+    @Column(nullable = false)
+    private Float depreciation;
+
+    @Column(name = "product_type_id")
     private Long productTypeId;
+
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }
