@@ -4,19 +4,21 @@ import com.autowise.demo.dto.CustomerDto;
 import com.autowise.demo.model.Customer;
 import org.mapstruct.*;
 
+import com.autowise.demo.dto.CustomerDto;
+import com.autowise.demo.model.Customer;
+import org.mapstruct.*;
+
 @Mapper(componentModel = "spring")
 public interface CustomerMapper {
 
-    @Mapping(source = "hashPassword", target = "password")
     CustomerDto toDto(Customer entity);
 
-    @Mapping(source = "password", target = "hashPassword")
-    @Mapping(target = "id", ignore = true)
     Customer toEntity(CustomerDto dto);
 
+    // ✅ important: ignore null on update so it won't wipe fields accidentally
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(source = "password", target = "hashPassword")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     void updateEntityFromDto(CustomerDto dto, @MappingTarget Customer entity);
-
 }
-

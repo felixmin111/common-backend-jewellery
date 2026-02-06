@@ -63,6 +63,12 @@ public class GemsPackage {
     @Column(name = "total_price")
     private Double totalPrice;
 
+    @Column(name = "current_quantity")
+    private Integer currentQuantity;
+
+    @Column(name = "current_weight")
+    private Double currentWeight;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "gem_type_id", nullable = false)
     private GemType gemType;
