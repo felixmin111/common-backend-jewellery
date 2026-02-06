@@ -108,4 +108,10 @@ public class GemsPackageService {
         if (!repo.existsById(id)) throw new RuntimeException("GemsPackage not found: " + id);
         repo.deleteById(id);
     }
+    public List<GemsPackageDto> getAvailable() {
+        return repo.findByCurrentQuantityGreaterThanAndCurrentWeightGreaterThan(0, 0.0)
+                .stream()
+                .map(mapper::toDto)
+                .toList();
+    }
 }

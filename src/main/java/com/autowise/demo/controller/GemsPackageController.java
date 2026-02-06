@@ -36,6 +36,10 @@ public class GemsPackageController {
     public GemsPackageDto update(@PathVariable Long id, @Valid @RequestBody GemsPackageDto req) {
         return service.update(id, req);
     }
+    @GetMapping("/available")
+    public List<GemsPackageDto> getAvailable() {
+        return service.getAvailable();
+    }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

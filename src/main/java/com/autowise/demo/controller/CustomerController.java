@@ -2,9 +2,9 @@ package com.autowise.demo.controller;
 
 import com.autowise.demo.dto.CustomerDto;
 import com.autowise.demo.service.CustomerService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,13 +28,12 @@ public class CustomerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CustomerDto create(@RequestBody CustomerDto request) {
+    public CustomerDto create(@Valid @RequestBody CustomerDto request) {
         return customerService.create(request);
     }
 
     @PutMapping("/{id}")
-    public CustomerDto update(@PathVariable String id,
-                              @Validated @RequestBody CustomerDto request) {
+    public CustomerDto update(@PathVariable Long id, @Valid @RequestBody CustomerDto request) {
         return customerService.update(id, request);
     }
 
@@ -44,4 +43,3 @@ public class CustomerController {
         customerService.delete(id);
     }
 }
-
