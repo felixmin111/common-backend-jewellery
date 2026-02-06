@@ -29,7 +29,6 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductDto create(@Valid @RequestBody ProductDto request) {
-        System.out.println("DEBUG create request = " + request);
         return productService.create(request);
     }
 
