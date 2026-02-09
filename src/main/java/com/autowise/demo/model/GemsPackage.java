@@ -45,8 +45,11 @@ public class GemsPackage {
     @Column(name = "buy_date")
     private LocalDate buyDate;
 
-    @Column(name = "certificate_id")
-    private Long certificateId;
+
+    @OneToMany(mappedBy = "gemsPackage", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<CertificateImage> certificateImages = new java.util.ArrayList<>();
+
+
 
     @Column(name = "seller_id")
     private Long sellerId;
