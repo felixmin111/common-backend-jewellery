@@ -4,10 +4,7 @@ import com.autowise.demo.dto.GoldPriceHistoryDto;
 import com.autowise.demo.model.GoldPriceHistory;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-
 
 
 @Mapper(componentModel = "spring")
