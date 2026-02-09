@@ -48,7 +48,8 @@ public class GemsPackageDto {
     private LocalDate buyDate;
 
 
-    private Long certificateId;
+    private java.util.List<CertificateImageDto> certificateImages;
+
     @NotNull(message = "Seller ID is required")
     private Long sellerId;
 
