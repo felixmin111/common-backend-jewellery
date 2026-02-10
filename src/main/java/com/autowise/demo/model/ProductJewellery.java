@@ -4,13 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "product_gold")
+@Table(name = "product_jewellery")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductGold {
+public class ProductJewellery {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,19 +21,14 @@ public class ProductGold {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    // ✅ relation to gold_source
+    // ✅ relation to gems_package
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "gold_source_id", nullable = false)
-    private GoldSource goldSource;
-
-    // ✅ relation to craft
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "craft_id", nullable = false)
-    private Craft craft;
+    @JoinColumn(name = "gems_package_id", nullable = false)
+    private GemsPackage gemsPackage;
 
     @Column(nullable = false)
-    private Float weight;
+    private Integer qty;
 
-    @Column(name = "gold_purity", nullable = false)
-    private Float goldPurity;
+    @Column(name = "selling_price", nullable = false)
+    private Double sellingPrice;
 }

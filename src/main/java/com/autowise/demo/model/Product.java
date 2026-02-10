@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "product")
@@ -27,7 +29,6 @@ public class Product {
     @Column(name = "stock_status", length = 20)
     private String stockStatus;
 
-    // ✅ Postgres keyword: use quoted column name
     @Column(name = "\"desc\"", length = 300)
     private String desc;
 
@@ -58,6 +59,16 @@ public class Product {
 
     @Column(name = "product_type_id")
     private Long productTypeId;
+
+    // ✅ Product -> Gold rows
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<ProductGold> productGolds = new LinkedHashSet<>();
+
+    // ✅ Product -> Jewellery rows
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<ProductJewellery> productJewellerys = new LinkedHashSet<>();
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

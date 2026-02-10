@@ -1,9 +1,9 @@
 package com.autowise.demo.dto;
 
-import com.autowise.demo.model.ProductGold;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
 import lombok.*;
 
 import java.util.Set;
@@ -41,11 +41,8 @@ public class ProductDto {
     private String color;
 
     private Float weight;
-
     private Float metarialLoss;
-
     private Float makingCost;
-
     private Long colorCount;
 
     @NotNull(message = "Depreciation is required")
@@ -53,7 +50,7 @@ public class ProductDto {
 
     private Long productTypeId;
 
-    private Set<ProductGold> productGolds;
-
-    private Set<ProductJewelleryDto> productJewellerys;
+    // ✅ UI sections
+    private Set<ProductGoldItemDto> productGolds;
+    private Set<ProductJewelleryItemDto> productJewellerys;
 }
