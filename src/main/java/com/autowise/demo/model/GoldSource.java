@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "gold_source")
@@ -37,6 +39,11 @@ public class GoldSource {
 
     @Column(nullable = false, length = 90)
     private String name;
+
+    // ✅ optional reverse relation
+    @OneToMany(mappedBy = "goldSource")
+    @Builder.Default
+    private Set<ProductGold> productGolds = new LinkedHashSet<>();
 
     @Column(name="created_at", updatable = false)
     private LocalDateTime createdAt;

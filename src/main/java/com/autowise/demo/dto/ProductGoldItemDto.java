@@ -7,12 +7,9 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductGoldDto {
+public class ProductGoldItemDto {
 
     private Long id;
-
-    @NotNull(message = "Product ID is required")
-    private Long productId;
 
     @NotNull(message = "Gold Source ID is required")
     private Long goldSourceId;
@@ -26,8 +23,7 @@ public class ProductGoldDto {
     @NotNull(message = "Gold purity is required")
     private Float goldPurity;
 
-    // ✅ display only
-    private String productName;
+    // display only (response)
     private String goldSourceName;
     private String craftShopName;
 }
