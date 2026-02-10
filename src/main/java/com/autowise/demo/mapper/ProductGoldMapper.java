@@ -7,7 +7,6 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface ProductGoldMapper {
 
-    // ✅ IDs + display names
     @Mapping(source = "product.id", target = "productId")
     @Mapping(source = "goldSource.id", target = "goldSourceId")
     @Mapping(source = "craft.id", target = "craftId")
@@ -17,7 +16,6 @@ public interface ProductGoldMapper {
     @Mapping(source = "craft.shopName", target = "craftShopName")
     ProductGoldDto toDto(ProductGold entity);
 
-    // ✅ for create/update: we set relations in service (by ids)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "product", ignore = true)
     @Mapping(target = "goldSource", ignore = true)
