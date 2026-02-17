@@ -3,6 +3,9 @@ package com.autowise.demo.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "seller")
 @Getter
@@ -27,4 +30,9 @@ public class Seller {
 
     @Column(length = 200)
     private String address;
+
+    // ✅ one seller -> many gold sources
+    @OneToMany(mappedBy = "seller")
+    @Builder.Default
+    private Set<GoldSource> goldSources = new LinkedHashSet<>();
 }

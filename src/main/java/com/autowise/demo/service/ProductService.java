@@ -23,6 +23,9 @@ public class ProductService {
     private final CraftRepository craftRepository;
     private final GemsPackageRepository gemsPackageRepository;
 
+    // ✅ NEW
+    private final JewelryTypeRepository jewelryTypeRepository;
+
     public List<ProductDto> getAll() {
         return productRepository.findAll().stream()
                 .map(productMapper::toDto)
@@ -36,6 +39,10 @@ public class ProductService {
     }
 
     public ProductDto create(ProductDto request) {
+
+        // ✅ VALIDATE productTypeId -> JewelryType exists
+        validateProductTypeId(request.getProductTypeId());
+
         Product entity = productMapper.toEntity(request);
 
         applyGoldRows(entity, request.getProductGolds());
@@ -49,9 +56,11 @@ public class ProductService {
         Product existing = productRepository.findByIdWithDetails(id)
                 .orElseThrow(() -> new RuntimeException("Product not found: " + id));
 
+        // ✅ VALIDATE productTypeId -> JewelryType exists
+        validateProductTypeId(request.getProductTypeId());
+
         productMapper.updateEntityFromDto(request, existing);
 
-        // replace rows
         existing.getProductGolds().clear();
         existing.getProductJewellerys().clear();
 
@@ -67,6 +76,16 @@ public class ProductService {
             throw new RuntimeException("Product not found: " + id);
         }
         productRepository.deleteById(id);
+    }
+
+    // ✅ NEW helper
+    private void validateProductTypeId(Long productTypeId) {
+        if (productTypeId == null) {
+            throw new RuntimeException("Product Type ID is required.");
+        }
+        if (!jewelryTypeRepository.existsById(productTypeId)) {
+            throw new RuntimeException("JewelryType not found for productTypeId: " + productTypeId);
+        }
     }
 
     private void applyGoldRows(Product product, java.util.Set<ProductGoldItemDto> goldItems) {

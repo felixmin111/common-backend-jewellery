@@ -14,5 +14,6 @@ public interface SellerMapper {
     Seller toEntity(SellerDto dto);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "goldSources", ignore = true) // ✅ important
     void updateEntityFromDto(SellerDto dto, @MappingTarget Seller entity);
 }

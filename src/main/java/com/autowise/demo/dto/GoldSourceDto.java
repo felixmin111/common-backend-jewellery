@@ -25,6 +25,7 @@ public class GoldSourceDto {
 
     private Float originalPrice;
 
+    // ✅ link to Seller
     private Long sellerId;
 
     @NotBlank(message = "Name is required")

@@ -29,20 +29,13 @@ public class SellerService {
     }
 
     public SellerDto create(SellerDto request) {
-
-        // normalize email
         String email = request.getEmail();
         if (email != null) email = email.trim().toLowerCase();
 
-        // block duplicate
         if (email != null && !email.isBlank() && repo.existsByEmailIgnoreCase(email)) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    "Email already exists"
-            );
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
         }
 
-        // save with normalized email
         Seller entity = mapper.toEntity(request);
         entity.setEmail(email);
 
@@ -61,7 +54,6 @@ public class SellerService {
             if (currentEmail == null) currentEmail = "";
             currentEmail = currentEmail.trim().toLowerCase();
 
-            // email changed AND already exists for someone else
             if (!newEmail.equals(currentEmail) && repo.existsByEmailIgnoreCase(newEmail)) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
             }
@@ -74,12 +66,12 @@ public class SellerService {
     }
 
     public void delete(Long id) {
-        if (!repo.existsById(id)) throw new RuntimeException("Seller not found: " + id);
+        if (!repo.existsById(id)) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Seller not found: " + id);
         repo.deleteById(id);
     }
 
     public Seller requireEntity(Long id) {
         return repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Seller not found: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Seller not found: " + id));
     }
 }

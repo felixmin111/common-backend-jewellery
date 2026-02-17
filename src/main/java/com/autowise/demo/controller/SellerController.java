@@ -27,12 +27,8 @@ public class SellerController {
         return service.create(request);
     }
 
-
     @PutMapping("/{id}")
-    public SellerDto update(
-            @PathVariable Long id,
-            @Valid @RequestBody SellerDto request
-    ) {
+    public SellerDto update(@PathVariable Long id, @Valid @RequestBody SellerDto request) {
         return service.update(id, request);
     }
 
