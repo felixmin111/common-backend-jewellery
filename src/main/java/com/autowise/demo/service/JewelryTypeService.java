@@ -20,27 +20,25 @@ public class JewelryTypeService {
 
     private final JewelryTypeRepository typeRepo;
     private final CategoryRepository categoryRepo;
-
+    private final JewelryTypeMapper mapper; // ✅ inject mapper
 
     public List<JewelryTypeDto> getAll() {
         return typeRepo.findAll()
                 .stream()
-                .map(JewelryTypeMapper::toDto)
+                .map(mapper::toDto)
                 .toList();
     }
-
 
     public JewelryTypeDto getById(Long id) {
         JewelryType t = typeRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("JewelryType not found: " + id));
-        return JewelryTypeMapper.toDto(t);
+        return mapper.toDto(t);
     }
-
 
     public List<JewelryTypeDto> getByCategory(Long categoryId) {
         return typeRepo.findAllByCategoryIdOrderByNameAsc(categoryId)
                 .stream()
-                .map(JewelryTypeMapper::toDto)
+                .map(mapper::toDto)
                 .toList();
     }
 
@@ -52,11 +50,12 @@ public class JewelryTypeService {
             throw new IllegalArgumentException("Type already exists under this category.");
         }
 
-        JewelryType t = new JewelryType();
-        JewelryTypeMapper.apply(t, dto, category);
+        JewelryType t = mapper.toEntity(dto);
+        t.setCategory(category); // ✅ set category
+        // ✅ imageUrl already inside dto -> entity mapping
 
         t = typeRepo.save(t);
-        return JewelryTypeMapper.toDto(t);
+        return mapper.toDto(t);
     }
 
     public JewelryTypeDto update(Long id, JewelryTypeDto dto) {
@@ -74,10 +73,11 @@ public class JewelryTypeService {
             throw new IllegalArgumentException("Type already exists under this category.");
         }
 
-        JewelryTypeMapper.apply(existing, dto, category);
+        mapper.updateEntityFromDto(dto, existing); // ✅ update fields (name, imageUrl)
+        existing.setCategory(category);
 
         existing = typeRepo.save(existing);
-        return JewelryTypeMapper.toDto(existing);
+        return mapper.toDto(existing);
     }
 
     public void delete(Long id) {

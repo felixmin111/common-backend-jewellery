@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -48,7 +49,8 @@ public class GemsPackageDto {
     private LocalDate buyDate;
 
 
-    private java.util.List<CertificateImageDto> certificateImages;
+
+    private List<CertificateImageDto> certificateImages;
 
     @NotNull(message = "Seller ID is required")
     private Long sellerId;
