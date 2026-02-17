@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "gems_package")
@@ -46,8 +48,10 @@ public class GemsPackage {
     private LocalDate buyDate;
 
 
+
+
     @OneToMany(mappedBy = "gemsPackage", cascade = CascadeType.ALL, orphanRemoval = true)
-    private java.util.List<CertificateImage> certificateImages = new java.util.ArrayList<>();
+    private List<CertificateImage> certificateImages = new ArrayList<>();
 
 
 

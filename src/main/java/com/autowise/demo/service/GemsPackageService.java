@@ -119,6 +119,7 @@ public class GemsPackageService {
                 .toList();
     }
 
+    @Transactional
     public GemsPackageDto addCertificate(Long packageId, CertificateImageDto req) {
         GemsPackage pkg = repo.findById(packageId)
                 .orElseThrow(() -> new RuntimeException("GemsPackage not found: " + packageId));
@@ -129,9 +130,9 @@ public class GemsPackageService {
                 .gemsPackage(pkg)
                 .build();
 
-        pkg.getCertificateImages().add(cert); // cascade saves it
+        certificateImageRepo.save(cert); // ✅ guaranteed insert
 
-        return mapper.toDto(repo.save(pkg));
+        return mapper.toDto(repo.findById(packageId).orElseThrow());
     }
 
     public void deleteCertificate(Long certId) {
