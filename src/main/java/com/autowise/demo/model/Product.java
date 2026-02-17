@@ -57,8 +57,14 @@ public class Product {
     @Column(nullable = false)
     private Float depreciation;
 
+    // ✅ KEEP THIS (your existing field)
     @Column(name = "product_type_id")
     private Long productTypeId;
+
+    // ✅ NEW: read-only relation using SAME column (doesn't break your code)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_type_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private JewelryType productType;
 
     // ✅ Product -> Gold rows
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
