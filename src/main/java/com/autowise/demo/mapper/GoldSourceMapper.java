@@ -16,5 +16,6 @@ public interface GoldSourceMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "seller", ignore = true) // ✅ important (seller is derived from sellerId)
     void updateEntityFromDto(GoldSourceDto dto, @MappingTarget GoldSource entity);
 }

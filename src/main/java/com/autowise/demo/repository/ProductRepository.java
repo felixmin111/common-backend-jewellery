@@ -10,6 +10,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("""
         select distinct p from Product p
+        left join fetch p.productType pt
         left join fetch p.productGolds pg
         left join fetch pg.goldSource
         left join fetch pg.craft
