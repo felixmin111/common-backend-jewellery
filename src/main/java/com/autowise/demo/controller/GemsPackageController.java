@@ -1,5 +1,6 @@
 package com.autowise.demo.controller;
 
+import com.autowise.demo.dto.CertificateImageDto;
 import com.autowise.demo.dto.GemsPackageDto;
 import com.autowise.demo.service.GemsPackageService;
 import jakarta.validation.Valid;
@@ -45,5 +46,17 @@ public class GemsPackageController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         service.delete(id);
+    }
+
+    @PostMapping("/{id}/certificates")
+    public GemsPackageDto addCertificate(@PathVariable Long id,
+                                         @RequestBody CertificateImageDto req) {
+        return service.addCertificate(id, req);
+    }
+
+    @DeleteMapping("/certificates/{certId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCertificate(@PathVariable Long certId) {
+        service.deleteCertificate(certId);
     }
 }

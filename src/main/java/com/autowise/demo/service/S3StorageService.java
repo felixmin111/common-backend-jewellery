@@ -42,7 +42,8 @@ public class S3StorageService {
             );
 
         } catch (Exception e) {
-            throw new RuntimeException("Failed to upload image to S3", e);
+            e.printStackTrace(); // ✅ see real error in console
+            throw new RuntimeException("Failed to upload image to S3: " + e.getMessage(), e);
         }
     }
 }
