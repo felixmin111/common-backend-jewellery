@@ -7,6 +7,9 @@ public record JewelryTypeDto(
         Long id,
         @NotBlank String name,
         @NotNull Long categoryId,
+        String imageUrl,
+        String description,
         String categoryName // helpful for UI (optional from client)
+
 ) {
 }

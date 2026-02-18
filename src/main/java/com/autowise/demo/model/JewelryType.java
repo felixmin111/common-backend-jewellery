@@ -24,7 +24,13 @@ public class JewelryType {
     @Column(nullable = false, length = 120)
     private String name;
 
+    @Column(name = "image_url", length = 1024)
+    private String imageUrl;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    @Column(name = "description", length = 2000)
+    private String description;
 }

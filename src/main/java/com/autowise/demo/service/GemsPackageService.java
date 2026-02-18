@@ -1,8 +1,11 @@
 package com.autowise.demo.service;
 
+import com.autowise.demo.dto.CertificateImageDto;
 import com.autowise.demo.dto.GemsPackageDto;
 import com.autowise.demo.mapper.GemsPackageMapper;
+import com.autowise.demo.model.CertificateImage;
 import com.autowise.demo.model.GemsPackage;
+import com.autowise.demo.repository.CertificateImageRepository;
 import com.autowise.demo.repository.GemsPackageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,7 @@ public class GemsPackageService {
 
     private final GemsPackageMapper mapper;
     private final GemsPackageRepository repo;
+    private final CertificateImageRepository certificateImageRepo;
     private final SellerService sellerService;
     private final GemTypeService gemTypeService;
 
@@ -113,5 +117,25 @@ public class GemsPackageService {
                 .stream()
                 .map(mapper::toDto)
                 .toList();
+    }
+
+    @Transactional
+    public GemsPackageDto addCertificate(Long packageId, CertificateImageDto req) {
+        GemsPackage pkg = repo.findById(packageId)
+                .orElseThrow(() -> new RuntimeException("GemsPackage not found: " + packageId));
+
+        CertificateImage cert = CertificateImage.builder()
+                .imageUrl(req.getImageUrl())
+                .title(req.getTitle())
+                .gemsPackage(pkg)
+                .build();
+
+        certificateImageRepo.save(cert); // ✅ guaranteed insert
+
+        return mapper.toDto(repo.findById(packageId).orElseThrow());
+    }
+
+    public void deleteCertificate(Long certId) {
+        certificateImageRepo.deleteById(certId);
     }
 }

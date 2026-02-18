@@ -31,4 +31,5 @@ public class AwsConfig {
                 .withCredentials(new AWSStaticCredentialsProvider(creds))
                 .build();
     }
+
 }
