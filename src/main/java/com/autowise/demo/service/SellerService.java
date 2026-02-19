@@ -41,6 +41,9 @@ public class SellerService {
                     "Email already exists"
             );
         }
+        if (repo.existsByPhone(request.getPhone())) {
+            throw new RuntimeException("Phone number already exists.");
+        }
 
         // save with normalized email
         Seller entity = mapper.toEntity(request);
@@ -53,6 +56,9 @@ public class SellerService {
     public SellerDto update(Long id, SellerDto request) {
         Seller entity = requireEntity(id);
 
+        // =========================
+        // EMAIL UNIQUE CHECK
+        // =========================
         String newEmail = request.getEmail();
         if (newEmail != null) newEmail = newEmail.trim().toLowerCase();
 
@@ -67,8 +73,28 @@ public class SellerService {
             }
         }
 
+        // =========================
+        // PHONE UNIQUE CHECK ✅
+        // =========================
+        String newPhone = request.getPhone();
+        if (newPhone != null) newPhone = newPhone.trim();
+
+        if (newPhone != null && !newPhone.isBlank()) {
+            String currentPhone = entity.getPhone();
+            if (currentPhone == null) currentPhone = "";
+            currentPhone = currentPhone.trim();
+
+            // phone changed AND already exists for someone else
+            if (!newPhone.equals(currentPhone) && repo.existsByPhone(newPhone)) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Phone already exists");
+            }
+        }
+
         mapper.updateEntityFromDto(request, entity);
+
+        // keep normalized values
         entity.setEmail(newEmail);
+        entity.setPhone(newPhone);
 
         return mapper.toDto(repo.save(entity));
     }

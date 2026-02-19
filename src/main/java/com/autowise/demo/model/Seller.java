@@ -19,7 +19,7 @@ public class Seller {
     @Column(length = 90, nullable = false)
     private String name;
 
-    @Column(length = 30)
+    @Column(length = 30, unique = true)
     private String phone;
 
     @Column(length = 120, unique = true)
