@@ -35,6 +35,9 @@ public class SellerService {
         if (email != null && !email.isBlank() && repo.existsByEmailIgnoreCase(email)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
         }
+        if (repo.existsByPhone(request.getPhone())) {
+            throw new RuntimeException("Phone number already exists.");
+        }
 
         Seller entity = mapper.toEntity(request);
         entity.setEmail(email);
@@ -46,6 +49,9 @@ public class SellerService {
     public SellerDto update(Long id, SellerDto request) {
         Seller entity = requireEntity(id);
 
+        // =========================
+        // EMAIL UNIQUE CHECK
+        // =========================
         String newEmail = request.getEmail();
         if (newEmail != null) newEmail = newEmail.trim().toLowerCase();
 
@@ -54,13 +60,34 @@ public class SellerService {
             if (currentEmail == null) currentEmail = "";
             currentEmail = currentEmail.trim().toLowerCase();
 
+            // email changed AND already exists for someone else
             if (!newEmail.equals(currentEmail) && repo.existsByEmailIgnoreCase(newEmail)) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
             }
         }
 
+        // =========================
+        // PHONE UNIQUE CHECK ✅
+        // =========================
+        String newPhone = request.getPhone();
+        if (newPhone != null) newPhone = newPhone.trim();
+
+        if (newPhone != null && !newPhone.isBlank()) {
+            String currentPhone = entity.getPhone();
+            if (currentPhone == null) currentPhone = "";
+            currentPhone = currentPhone.trim();
+
+            // phone changed AND already exists for someone else
+            if (!newPhone.equals(currentPhone) && repo.existsByPhone(newPhone)) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Phone already exists");
+            }
+        }
+
         mapper.updateEntityFromDto(request, entity);
+
+        // keep normalized values
         entity.setEmail(newEmail);
+        entity.setPhone(newPhone);
 
         return mapper.toDto(repo.save(entity));
     }
