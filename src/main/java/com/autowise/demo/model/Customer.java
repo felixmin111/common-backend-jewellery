@@ -29,7 +29,7 @@ public class Customer {
     @Column(nullable = false, length = 30, unique = true)
     private String phone;
 
-    @Column(length = 120)
+    @Column(length = 120, unique = true)
     private String email;
 
     @Column(columnDefinition = "TEXT")
