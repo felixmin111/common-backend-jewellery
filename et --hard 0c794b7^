@@ -1,0 +1,62 @@
+[33m499193a[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mtoe-invoiceBackend-branch[m[33m)[m update
+[33mcf9a102[m update
+[33m0c794b7[m updateCode
+[33m795a0ed[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m merge with AK
+[33ma73cd1c[m[33m ([m[1;31morigin/gemspackage-update[m[33m)[m image upload
+[33m1f90983[m merge with toe
+[33md9aaefd[m[33m ([m[1;31morigin/toe-productBranch-backend[m[33m, [m[1;32mtoe-productBranch-backend[m[33m)[m updateAssign
+[33m0c2a6d1[m product register
+[33m82d6efc[m updateAssign
+[33md2dc9e7[m merged
+[33m21a8e33[m[33m ([m[1;31morigin/imageUpload[m[33m)[m added
+[33m1914a1d[m merged code
+[33mafafb34[m added the one that i updated
+[33m0e95db5[m image upload
+[33m2ba531e[m fix setting
+[33ma683e2b[m merge with ak
+[33m2f8830f[m merge main
+[33m8e26fd7[m[33m ([m[1;31morigin/newduplicatefixing[m[33m)[m added package final
+[33mf1aef3d[m[33m ([m[1;31morigin/toe-backend-assignUpdate[m[33m, [m[1;32mtoe-backend-assignUpdate[m[33m)[m updateAssign
+[33m7d56fd4[m added the latest
+[33m4f36261[m fix cross config
+[33m31450b5[m fix datasource
+[33m4d3c146[m fix the database url
+[33m64295c5[m fix the security config error
+[33m7f3aa0a[m format code
+[33mf554a1e[m fix application.properties
+[33ma81435c[m add system.properties
+[33m6cad427[m merge with toe
+[33m5cfd7f4[m updateAssign
+[33m8e8eb8c[m merge latest
+[33m390f449[m added
+[33m853a559[m[33m ([m[1;31morigin/toe-backend-latest[m[33m, [m[1;32mtoe-backend-latest[m[33m)[m update productTag
+[33m93a8139[m[33m ([m[1;31morigin/dev[m[33m, [m[1;32mdev[m[33m)[m merge with toe and aung
+[33m45e56ac[m[33m ([m[1;31morigin/new-fix-ak[m[33m)[m added packages and jewelry types
+[33mc5bb725[m updateBackend
+[33mbd977cc[m[33m ([m[1;31morigin/ak-api-fix[m[33m)[m added duplicated
+[33m84ef07e[m Merge branch 'dev' into ak-api-fix :wqg the commit.
+[33m3f1e7b1[m added email duplicate
+[33mec67dfe[m add security filter change
+[33m6b7fb8a[m add http method in common backend
+[33m265ec74[m added
+[33mb8accea[m[33m ([m[1;31morigin/toebackend[m[33m, [m[1;32mtoebackend[m[33m)[m fix and merge the code
+[33m635bcce[m merge with toe
+[33m3880345[m[33m ([m[1;31morigin/Toe-backend-branch[m[33m, [m[1;32mToe-backend-branch[m[33m)[m Update
+[33m9d9fcf4[m fix the cros config
+[33m2a2639c[m updateCode
+[33ma700be0[m fix the param name
+[33m1ce3f47[m update
+[33mc814a34[m update
+[33m57cb083[m fix the test
+[33m6c3ac9e[m testing
+[33m4453a34[m update
+[33mc5264c1[m mapper config
+[33m03fa1b7[m add security
+[33m30fe5b0[m toe-backend
+[33m52eb118[m[33m ([m[1;31morigin/ak-type[m[33m)[m push global exception hlandler code
+[33m3651378[m Added categories UI + pinia store + mapper and backend logic
+[33mebdba79[m toe-category
+[33m9e2be6f[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m common backend code fix
+[33m39fd6d3[m clean credital
+[33mfb5b9c3[m add code
+[33mc86d1e0[m first commit
