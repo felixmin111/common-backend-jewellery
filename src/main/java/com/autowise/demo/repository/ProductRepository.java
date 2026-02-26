@@ -4,6 +4,7 @@ import com.autowise.demo.model.Product;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
@@ -19,4 +20,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         where p.id = :id
     """)
     Optional<Product> findByIdWithDetails(@Param("id") Long id);
+
+    List<Product> findByProductTypeId(Long productTypeId);
 }

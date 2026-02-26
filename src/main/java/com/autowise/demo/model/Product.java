@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -65,6 +67,9 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_type_id", referencedColumnName = "id", insertable = false, updatable = false)
     private JewelryType productType;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductImage> productImages = new ArrayList<>();
 
     // ✅ Product -> Gold rows
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)

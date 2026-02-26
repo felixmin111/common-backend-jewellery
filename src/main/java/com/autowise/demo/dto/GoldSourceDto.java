@@ -31,4 +31,7 @@ public class GoldSourceDto {
     @NotBlank(message = "Name is required")
     @Size(max = 90, message = "Name must be at most 90 characters")
     private String name;
+
+    private Float usedWeight;      // ✅ NEW
+    private Float remainingWeight; // ✅ NEW
 }

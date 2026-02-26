@@ -1,6 +1,7 @@
 package com.autowise.demo.controller;
 
 import com.autowise.demo.dto.ProductDto;
+import com.autowise.demo.dto.ProductImageDto;
 import com.autowise.demo.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -42,4 +43,21 @@ public class ProductController {
     public void delete(@PathVariable Long id) {
         productService.delete(id);
     }
+
+    @GetMapping("/type/{typeId}")
+    public List<ProductDto> getByType(@PathVariable Long typeId) {
+        return productService.getProductsByTypeId(typeId);
+    }
+    @PostMapping("/{id}/images")
+    public ProductDto addProductImage(@PathVariable Long id,
+                                      @RequestBody ProductImageDto req) {
+        return productService.addProductImage(id, req);
+    }
+
+    @DeleteMapping("/images/{imageId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteProductImage(@PathVariable Long imageId) {
+        productService.deleteProductImage(imageId);
+    }
+
 }

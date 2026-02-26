@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -22,6 +23,9 @@ public class ProductService {
     private final GoldSourceRepository goldSourceRepository;
     private final CraftRepository craftRepository;
     private final GemsPackageRepository gemsPackageRepository;
+    private final ProductRepository repo;
+    private final ProductMapper mapper;
+    private final ProductImageRepository productImageRepo;
 
     // ✅ NEW
     private final JewelryTypeRepository jewelryTypeRepository;
@@ -42,8 +46,11 @@ public class ProductService {
 
         // ✅ VALIDATE productTypeId -> JewelryType exists
         validateProductTypeId(request.getProductTypeId());
+        validateGoldWeightsForCreate(request.getProductGolds());
+
 
         Product entity = productMapper.toEntity(request);
+
 
         applyGoldRows(entity, request.getProductGolds());
         applyJewelleryRows(entity, request.getProductJewellerys());
@@ -58,6 +65,7 @@ public class ProductService {
 
         // ✅ VALIDATE productTypeId -> JewelryType exists
         validateProductTypeId(request.getProductTypeId());
+        validateGoldWeightsForUpdate(id, request.getProductGolds());
 
         productMapper.updateEntityFromDto(request, existing);
 
@@ -134,5 +142,72 @@ public class ProductService {
 
             product.getProductJewellerys().add(pj);
         }
+    }
+    public List<ProductDto> getProductsByTypeId(Long typeId) {
+        return productRepository.findByProductTypeId(typeId)
+                .stream()
+                .map(productMapper::toDto)
+                .toList();
+    }
+    public ProductDto getProductById(Long id) {
+        Product p = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        return productMapper.toDto(p);
+    }
+    private void validateGoldWeightsForCreate(Collection<ProductGoldItemDto> rows) {
+        if (rows == null) return;
+
+        for (var r : rows) {
+            GoldSource gs = goldSourceRepository.findById(r.getGoldSourceId())
+                    .orElseThrow(() -> new RuntimeException("GoldSource not found: " + r.getGoldSourceId()));
+
+            double total = gs.getWeight();              // original total weight
+            double used  = goldSourceRepository.sumUsedByGoldSource(gs.getId()); // used in DB already
+            double remaining = total - used;
+
+            if (r.getWeight() > remaining) {
+                throw new RuntimeException("GoldSource " + gs.getId()
+                        + " remaining is " + remaining + " but requested " + r.getWeight());
+            }
+        }
+    }
+    private void validateGoldWeightsForUpdate(Long productId, Collection<ProductGoldItemDto> rows) {
+        if (rows == null) return;
+
+        for (var r : rows) {
+            GoldSource gs = goldSourceRepository.findById(r.getGoldSourceId())
+                    .orElseThrow(() -> new RuntimeException("GoldSource not found: " + r.getGoldSourceId()));
+
+            double total = gs.getWeight();
+            double usedAll = goldSourceRepository.sumUsedByGoldSource(gs.getId());
+            double usedByThisProduct = goldSourceRepository.sumUsedByGoldSourceAndProduct(gs.getId(), productId);
+
+            double usedByOthers = usedAll - usedByThisProduct;
+            double remaining = total - usedByOthers;
+
+            if (r.getWeight() > remaining) {
+                throw new RuntimeException("GoldSource " + gs.getId()
+                        + " remaining is " + remaining + " but requested " + r.getWeight());
+            }
+        }
+    }
+    @Transactional
+    public ProductDto addProductImage(Long productId, ProductImageDto req) {
+
+        Product product = repo.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found: " + productId));
+
+        ProductImage img = ProductImage.builder()
+                .imageUrl(req.getImageUrl())
+                .product(product)
+                .build();
+
+        productImageRepo.save(img); // ✅ guaranteed insert
+
+        return mapper.toDto(repo.findById(productId).orElseThrow());
+    }
+
+    public void deleteProductImage(Long imageId) {
+        productImageRepo.deleteById(imageId);
     }
 }

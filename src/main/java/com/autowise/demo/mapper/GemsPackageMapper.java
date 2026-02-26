@@ -4,6 +4,7 @@ import com.autowise.demo.dto.GemsPackageDto;
 import com.autowise.demo.model.GemsPackage;
 import org.mapstruct.*;
 
+
 @Mapper(componentModel = "spring")
 public interface GemsPackageMapper {
 
@@ -21,4 +22,7 @@ public interface GemsPackageMapper {
     @Mapping(target = "gemType", ignore = true)
     @Mapping(target = "certificateImages", ignore = true) // ✅ important
     void updateEntityFromDto(GemsPackageDto dto, @MappingTarget GemsPackage entity);
+
+
+
 }

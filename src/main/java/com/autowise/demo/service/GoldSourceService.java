@@ -23,7 +23,39 @@ public class GoldSourceService {
     private final GoldSourceMapper mapper;
 
     public List<GoldSourceDto> getAll() {
-        return repo.findAll().stream().map(mapper::toDto).toList();
+
+        return repo.findAllWithUsedWeight()
+                .stream()
+                .map(r -> {
+                    Long id = (Long) r[0];
+                    String name = (String) r[1];
+                    String purity = (String) r[2];
+                    Float total = (Float) r[3];
+                    Float originalPrice = (Float) r[4];
+                    String color = (String) r[5];
+                    String country = (String) r[6];
+                    Long sellerId = (Long) r[7];
+                    Float used = ((Number) r[8]).floatValue();
+
+                    float remaining = (total == null ? 0f : total) - (used == null ? 0f : used);
+                    if (remaining < 0) remaining = 0;
+
+                    GoldSourceDto dto = new GoldSourceDto();
+                    dto.setId(id);
+                    dto.setName(name);
+                    dto.setGoldPurity(purity);
+                    dto.setWeight(total);
+                    dto.setOriginalPrice(originalPrice);
+                    dto.setColor(color);
+                    dto.setSourceCountry(country);
+                    dto.setSellerId(sellerId);
+
+                    dto.setUsedWeight(used);
+                    dto.setRemainingWeight(remaining);
+
+                    return dto;
+                })
+                .toList();
     }
 
     public GoldSourceDto getById(Long id) {
@@ -84,4 +116,6 @@ public class GoldSourceService {
         }
         repo.deleteById(id);
     }
+
+
 }

@@ -17,10 +17,7 @@ public class GemsPackageController {
 
     private final GemsPackageService service;
 
-    @GetMapping
-    public List<GemsPackageDto> getAll() {
-        return service.getAll();
-    }
+
 
     @GetMapping("/{id}")
     public GemsPackageDto getById(@PathVariable Long id) {
@@ -52,6 +49,10 @@ public class GemsPackageController {
     public GemsPackageDto addCertificate(@PathVariable Long id,
                                          @RequestBody CertificateImageDto req) {
         return service.addCertificate(id, req);
+    }
+    @GetMapping("")
+    public List<GemsPackageDto> getAll() {
+        return service.getAll();
     }
 
     @DeleteMapping("/certificates/{certId}")
