@@ -35,6 +35,9 @@ public class CustomerService {
         if (repo.existsByPhone(req.getPhone())) {
             throw new IllegalArgumentException("Phone already exists: " + req.getPhone());
         }
+        if (repo.existsByEmail(req.getEmail())) {
+            throw new RuntimeException("Email already exists.");
+        }
 
         Customer entity = mapper.toEntity(req);
         Customer saved = repo.save(entity);
@@ -47,11 +50,20 @@ public class CustomerService {
         // normalize
         if (req.getName() != null) req.setName(req.getName().trim());
         if (req.getPhone() != null) req.setPhone(req.getPhone().trim());
-        if (req.getEmail() != null) req.setEmail(req.getEmail().trim());
+        if (req.getEmail() != null) req.setEmail(req.getEmail().trim().toLowerCase());
 
-        // if phone changed, check unique
-        if (req.getPhone() != null && repo.existsByPhoneAndIdNot(req.getPhone(), id)) {
+        // 🔹 Phone unique check
+        if (req.getPhone() != null &&
+                repo.existsByPhoneAndIdNot(req.getPhone(), id)) {
+
             throw new IllegalArgumentException("Phone already exists: " + req.getPhone());
+        }
+
+        // 🔹 Email unique check
+        if (req.getEmail() != null &&
+                repo.existsByEmailIgnoreCaseAndIdNot(req.getEmail(), id)) {
+
+            throw new IllegalArgumentException("Email already exists: " + req.getEmail());
         }
 
         mapper.updateEntityFromDto(req, entity);

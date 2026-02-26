@@ -24,9 +24,6 @@ public class GemsPackageService {
     private final SellerService sellerService;
     private final GemTypeService gemTypeService;
 
-    public List<GemsPackageDto> getAll() {
-        return repo.findAll().stream().map(mapper::toDto).toList();
-    }
 
     public GemsPackageDto getById(Long id) {
         GemsPackage entity = repo.findById(id)
@@ -117,6 +114,21 @@ public class GemsPackageService {
                 .stream()
                 .map(mapper::toDto)
                 .toList();
+    }
+    public List<GemsPackageDto> getAll() {
+        var rows = repo.findAllWithRemainingQty();
+
+        return rows.stream().map(r -> {
+            GemsPackageDto dto = new GemsPackageDto();
+            dto.setId(((Number) r.get("id")).longValue());
+            dto.setName((String) r.get("name"));
+            dto.setQuantity(((Number) r.get("quantity")).intValue());
+            dto.setRemainingQty(((Number) r.get("remainingQty")).intValue());
+            dto.setGemsSize(((Number) r.get("gemsSize")).doubleValue());
+            dto.setOriginalPrice(((Number) r.get("originalPrice")).doubleValue());
+            dto.setGemTypeName((String) r.get("gemTypeName"));
+            return dto;
+        }).toList();
     }
 
     @Transactional

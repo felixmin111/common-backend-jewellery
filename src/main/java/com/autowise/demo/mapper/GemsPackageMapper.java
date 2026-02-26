@@ -21,4 +21,7 @@ public interface GemsPackageMapper {
     @Mapping(target = "gemType", ignore = true)
     @Mapping(target = "certificateImages", ignore = true) // ✅ important
     void updateEntityFromDto(GemsPackageDto dto, @MappingTarget GemsPackage entity);
+
+
+
 }

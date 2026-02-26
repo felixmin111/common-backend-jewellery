@@ -54,6 +54,7 @@ public class GemsPackageDto {
 
     @NotNull(message = "Seller ID is required")
     private Long sellerId;
+    private Integer remainingQty;
 
     @NotNull(message = "Seller name is required")
     @Size(max = 90, message = "Seller name must be at most 90 characters")

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -39,6 +40,8 @@ public class ProductDto {
 
     @Size(max = 60, message = "Color must be at most 60 characters")
     private String color;
+
+    private List<ProductImageDto> productImages;
 
     private Float weight;
     private Float metarialLoss;

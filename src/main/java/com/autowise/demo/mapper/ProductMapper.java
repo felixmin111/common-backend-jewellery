@@ -18,6 +18,7 @@ public interface ProductMapper {
     // ✅ ignore collections because we create ProductGold/ProductJewellery in service
     @Mapping(target = "productGolds", ignore = true)
     @Mapping(target = "productJewellerys", ignore = true)
+    @Mapping(target = "productImages", ignore = true)
     Product toEntity(ProductDto dto);
 
     // ✅ Entity -> DTO: map collections manually
@@ -31,6 +32,7 @@ public interface ProductMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "productGolds", ignore = true)
     @Mapping(target = "productJewellerys", ignore = true)
+    @Mapping(target = "productImages", ignore = true)
     void updateEntityFromDto(ProductDto dto, @MappingTarget Product entity);
 
     // ---------------- helpers ----------------
@@ -61,5 +63,15 @@ public interface ProductMapper {
                 .unitWeight(r.getGemsPackage().getGemsWeight())
                 .build()
         ).collect(Collectors.toSet());
+    }
+    default Set<ProductImageDto> mapImages(Set<ProductImage> rows) {
+        if (rows == null) return null;
+
+        return rows.stream()
+                .map(r -> ProductImageDto.builder()
+                        .id(r.getId())
+                        .imageUrl(r.getImageUrl())
+                        .build())
+                .collect(Collectors.toSet());
     }
 }
