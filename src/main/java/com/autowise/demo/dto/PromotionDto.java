@@ -31,7 +31,7 @@ public class PromotionDto {
     @NotNull(message = "End date is required")
     private LocalDate endDate;
 
-    @NotNull(message = "Status is required")
+
     private String status; // "ACTIVE" / "INACTIVE"
 
     // output only

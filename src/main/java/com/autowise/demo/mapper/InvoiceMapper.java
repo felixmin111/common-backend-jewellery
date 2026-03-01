@@ -10,33 +10,28 @@ import java.util.stream.Collectors;
 public class InvoiceMapper {
 
     public static InvoiceResponseDto toDto(Invoice inv, List<PurchaseItem> items) {
-        InvoiceResponseDto dto = new InvoiceResponseDto();
-
-        dto.setId(inv.getId());
-        dto.setInvoiceNo(inv.getInvoiceNo());
-        dto.setCustomerId(inv.getCustomerId());
-        dto.setSubTotal(inv.getSubTotal());
-        dto.setDiscountAmount(inv.getDiscountAmount());
-        dto.setDiscountPercentage(inv.getDiscountPercentage());
-        dto.setFinalPrice(inv.getFinalPrice());
-        dto.setStatus(inv.getStatus());
-        dto.setCreatedAt(inv.getCreatedAt());
-        dto.setUpdatedAt(inv.getUpdatedAt());
-
-        var itemDtos = items.stream().map(it -> {
-            InvoiceResponseDto.ItemDto i = new InvoiceResponseDto.ItemDto();
-            i.setId(it.getId());
-            i.setProductId(it.getProductId());
-            i.setQty(it.getQty());
-            i.setSellingPrice(it.getSellingPrice());
-            i.setSubtotal(it.getSubtotal());
-            i.setDiscountAmount(it.getDiscountAmount());
-            i.setFinalPrice(it.getFinalPrice());
-            return i;
-        }).collect(Collectors.toList());
-
-        dto.setItems(itemDtos);
-
-        return dto;
+        return InvoiceResponseDto.builder()
+                .id(inv.getId())
+                .invoiceNo(inv.getInvoiceNo())
+                .customerId(inv.getCustomerId())
+                .subTotal(inv.getSubTotal())
+                .discountAmount(inv.getDiscountAmount())
+                .discountPercentage(inv.getDiscountPercentage())
+                .finalPrice(inv.getFinalPrice())
+                .status(inv.getStatus())
+                .createdAt(inv.getCreatedAt())
+                .updatedAt(inv.getUpdatedAt())
+                .items(items.stream().map(it ->
+                        InvoiceResponseDto.ItemDto.builder()
+                                .id(it.getId())
+                                .productId(it.getProductId())
+                                .qty(it.getQty())
+                                .sellingPrice(it.getSellingPrice())
+                                .subtotal(it.getSubtotal())
+                                .discountAmount(it.getDiscountAmount())
+                                .finalPrice(it.getFinalPrice())
+                                .build()
+                ).collect(Collectors.toList()))
+                .build();
     }
 }

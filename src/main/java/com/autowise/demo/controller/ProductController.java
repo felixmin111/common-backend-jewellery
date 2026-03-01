@@ -2,6 +2,8 @@ package com.autowise.demo.controller;
 
 import com.autowise.demo.dto.ProductDto;
 import com.autowise.demo.dto.ProductImageDto;
+import com.autowise.demo.mapper.ProductMapper;
+import com.autowise.demo.repository.ProductRepository;
 import com.autowise.demo.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,8 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
 
     @GetMapping
     public List<ProductDto> getAll() {

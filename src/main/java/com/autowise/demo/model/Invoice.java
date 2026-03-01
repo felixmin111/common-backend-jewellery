@@ -1,9 +1,14 @@
 package com.autowise.demo.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+@Data
 @Entity
 @Table(name = "invoices")
 public class Invoice {
@@ -39,6 +44,9 @@ public class Invoice {
     @Column(name="updated_at", nullable=false)
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PurchaseItem> items = new ArrayList<>();
+
     @PrePersist
     void prePersist() {
         LocalDateTime now = LocalDateTime.now();
@@ -54,29 +62,5 @@ public class Invoice {
     }
 
     // getters/setters
-    public Long getId() { return id; }
 
-    public String getInvoiceNo() { return invoiceNo; }
-    public void setInvoiceNo(String invoiceNo) { this.invoiceNo = invoiceNo; }
-
-    public Long getCustomerId() { return customerId; }
-    public void setCustomerId(Long customerId) { this.customerId = customerId; }
-
-    public BigDecimal getSubTotal() { return subTotal; }
-    public void setSubTotal(BigDecimal subTotal) { this.subTotal = subTotal; }
-
-    public BigDecimal getDiscountAmount() { return discountAmount; }
-    public void setDiscountAmount(BigDecimal discountAmount) { this.discountAmount = discountAmount; }
-
-    public BigDecimal getDiscountPercentage() { return discountPercentage; }
-    public void setDiscountPercentage(BigDecimal discountPercentage) { this.discountPercentage = discountPercentage; }
-
-    public BigDecimal getFinalPrice() { return finalPrice; }
-    public void setFinalPrice(BigDecimal finalPrice) { this.finalPrice = finalPrice; }
-
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
 }

@@ -1,6 +1,7 @@
 package com.autowise.demo.controller;
 
 import com.autowise.demo.dto.GoldPriceHistoryDto;
+import com.autowise.demo.model.enums.GoldPurity;
 import com.autowise.demo.service.GoldPriceHistoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,9 @@ public class GoldPriceHistoryController {
         return service.getAll();
     }
 
-    @GetMapping("/active")
-    public GoldPriceHistoryDto getActive() {
-        return service.getActive();
+    @GetMapping("/active/{purity}")
+    public GoldPriceHistoryDto getActiveByPurity(@PathVariable GoldPurity purity) {
+        return service.getActive(purity);
     }
 
     @PostMapping

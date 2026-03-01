@@ -1,9 +1,11 @@
 package com.autowise.demo.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
+@Data
 @Entity
 @Table(name = "purchase")
 public class PurchaseItem {
@@ -53,27 +55,5 @@ public class PurchaseItem {
         updatedAt = LocalDateTime.now();
     }
 
-    // getters/setters
-    public Long getId() { return id; }
 
-    public Invoice getInvoice() { return invoice; }
-    public void setInvoice(Invoice invoice) { this.invoice = invoice; }
-
-    public Long getProductId() { return productId; }
-    public void setProductId(Long productId) { this.productId = productId; }
-
-    public Long getQty() { return qty; }
-    public void setQty(Long qty) { this.qty = qty; }
-
-    public BigDecimal getSellingPrice() { return sellingPrice; }
-    public void setSellingPrice(BigDecimal sellingPrice) { this.sellingPrice = sellingPrice; }
-
-    public BigDecimal getSubtotal() { return subtotal; }
-    public void setSubtotal(BigDecimal subtotal) { this.subtotal = subtotal; }
-
-    public BigDecimal getDiscountAmount() { return discountAmount; }
-    public void setDiscountAmount(BigDecimal discountAmount) { this.discountAmount = discountAmount; }
-
-    public BigDecimal getFinalPrice() { return finalPrice; }
-    public void setFinalPrice(BigDecimal finalPrice) { this.finalPrice = finalPrice; }
 }

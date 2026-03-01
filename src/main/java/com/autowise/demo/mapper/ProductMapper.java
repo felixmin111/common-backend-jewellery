@@ -33,6 +33,7 @@ public interface ProductMapper {
     @Mapping(target = "productGolds", ignore = true)
     @Mapping(target = "productJewellerys", ignore = true)
     @Mapping(target = "productImages", ignore = true)
+    @Mapping(target="finalPrice", source="finalPrice")
     void updateEntityFromDto(ProductDto dto, @MappingTarget Product entity);
 
     // ---------------- helpers ----------------

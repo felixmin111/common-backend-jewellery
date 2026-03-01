@@ -17,6 +17,10 @@ public class GemsPackageController {
 
     private final GemsPackageService service;
 
+    @GetMapping
+    public List<GemsPackageDto> getAll() {
+        return service.getAll();
+    }
 
     @GetMapping("/{id}")
     public GemsPackageDto getById(@PathVariable Long id) {
@@ -33,6 +37,7 @@ public class GemsPackageController {
     public GemsPackageDto update(@PathVariable Long id, @Valid @RequestBody GemsPackageDto req) {
         return service.update(id, req);
     }
+
     @GetMapping("/available")
     public List<GemsPackageDto> getAvailable() {
         return service.getAvailable();
@@ -45,13 +50,8 @@ public class GemsPackageController {
     }
 
     @PostMapping("/{id}/certificates")
-    public GemsPackageDto addCertificate(@PathVariable Long id,
-                                         @RequestBody CertificateImageDto req) {
+    public GemsPackageDto addCertificate(@PathVariable Long id, @RequestBody CertificateImageDto req) {
         return service.addCertificate(id, req);
-    }
-    @GetMapping("")
-    public List<GemsPackageDto> getAll() {
-        return service.getAll();
     }
 
     @DeleteMapping("/certificates/{certId}")

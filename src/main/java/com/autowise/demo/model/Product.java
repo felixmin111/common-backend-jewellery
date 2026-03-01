@@ -63,6 +63,9 @@ public class Product {
     @Column(name = "product_type_id")
     private Long productTypeId;
 
+    @Column(name = "final_price")
+    private Float finalPrice;
+
     // ✅ NEW: read-only relation using SAME column (doesn't break your code)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_type_id", referencedColumnName = "id", insertable = false, updatable = false)

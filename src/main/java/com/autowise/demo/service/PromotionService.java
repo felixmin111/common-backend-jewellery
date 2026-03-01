@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -20,11 +21,13 @@ public class PromotionService {
     private final PromotionMapper mapper;
 
     public List<PromotionDto> getAll() {
-        return repo.findAll().stream().map(mapper::toDto).toList();
+        return repo.findAll()
+                .stream()
+                .map(this::toDtoWithComputedStatus)
+                .toList();
     }
-
     public PromotionDto getById(Long id) {
-        return mapper.toDto(requireEntity(id));
+        return toDtoWithComputedStatus(requireEntity(id));
     }
 
     public PromotionDto create(PromotionDto req) {
@@ -37,10 +40,10 @@ public class PromotionService {
         }
 
         Promotion entity = mapper.toEntity(req);
-        entity.setStatus(parseStatus(req.getStatus()));
+        entity.setStatus(computedStatus(entity));
 
         Promotion saved = repo.save(entity);
-        return mapper.toDto(saved);
+        return toDtoWithComputedStatus(saved);
     }
 
     public PromotionDto update(Long id, PromotionDto req) {
@@ -51,10 +54,10 @@ public class PromotionService {
         }
 
         mapper.updateEntityFromDto(req, entity);
-        entity.setStatus(parseStatus(req.getStatus()));
+        entity.setStatus(computedStatus(entity));
 
         Promotion saved = repo.save(entity);
-        return mapper.toDto(saved);
+        return toDtoWithComputedStatus(saved);
     }
 
     public void delete(Long id) {
@@ -73,5 +76,24 @@ public class PromotionService {
         } catch (Exception e) {
             throw new RuntimeException("Invalid status: " + status + " (use ACTIVE or INACTIVE)");
         }
+    }
+    private PromotionStatus computedStatus(Promotion p) {
+        LocalDate today = LocalDate.now();
+
+        if (p.getEndDate() != null && today.isAfter(p.getEndDate())) {
+            return PromotionStatus.INACTIVE;
+        }
+
+        // not started yet → treat as INACTIVE for now
+        if (p.getStartDate() != null && today.isBefore(p.getStartDate())) {
+            return PromotionStatus.INACTIVE;
+        }
+
+        return PromotionStatus.ACTIVE;
+    }
+    private PromotionDto toDtoWithComputedStatus(Promotion p) {
+        PromotionDto dto = mapper.toDto(p);
+        dto.setStatus(computedStatus(p).name());
+        return dto;
     }
 }

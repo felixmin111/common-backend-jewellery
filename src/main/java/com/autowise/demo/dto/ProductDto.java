@@ -32,6 +32,8 @@ public class ProductDto {
 
     private Long qty;
 
+    private Float finalPrice;
+
     @Size(max = 50, message = "Collection must be at most 50 characters")
     private String collection;
 

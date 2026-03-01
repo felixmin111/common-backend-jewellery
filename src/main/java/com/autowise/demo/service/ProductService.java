@@ -31,7 +31,13 @@ public class ProductService {
     private final JewelryTypeRepository jewelryTypeRepository;
 
     public List<ProductDto> getAll() {
-        return productRepository.findAll().stream()
+        List<Product> products = productRepository.findAll();
+
+        products.forEach(p ->
+                System.out.println("DB finalPrice = " + p.getFinalPrice())
+        );
+
+        return products.stream()
                 .map(productMapper::toDto)
                 .toList();
     }
@@ -48,12 +54,15 @@ public class ProductService {
         validateProductTypeId(request.getProductTypeId());
         validateGoldWeightsForCreate(request.getProductGolds());
 
-
         Product entity = productMapper.toEntity(request);
-
+        if (request.getFinalPrice() == null || request.getFinalPrice() <= 0) {
+            throw new RuntimeException("Final price is required.");
+        }
+        entity.setFinalPrice(request.getFinalPrice());
 
         applyGoldRows(entity, request.getProductGolds());
         applyJewelleryRows(entity, request.getProductJewellerys());
+        System.out.println("finalPrice = " + request.getFinalPrice());
 
         Product saved = productRepository.save(entity);
         return productMapper.toDto(saved);
@@ -66,6 +75,11 @@ public class ProductService {
         // ✅ VALIDATE productTypeId -> JewelryType exists
         validateProductTypeId(request.getProductTypeId());
         validateGoldWeightsForUpdate(id, request.getProductGolds());
+        if (request.getFinalPrice() == null || request.getFinalPrice() <= 0) {
+            throw new RuntimeException("Final price is required.");
+        }
+        existing.setFinalPrice(request.getFinalPrice());
+        System.out.println("finalPrice = " + request.getFinalPrice());
 
         productMapper.updateEntityFromDto(request, existing);
 
@@ -144,10 +158,17 @@ public class ProductService {
         }
     }
     public List<ProductDto> getProductsByTypeId(Long typeId) {
-        return productRepository.findByProductTypeId(typeId)
-                .stream()
+        List<Product> list = productRepository.findByProductTypeId(typeId);
+
+        list.forEach(p -> System.out.println("ENTITY id=" + p.getId() + " finalPrice=" + p.getFinalPrice()));
+
+        List<ProductDto> dtos = list.stream()
                 .map(productMapper::toDto)
                 .toList();
+
+        dtos.forEach(d -> System.out.println("DTO id=" + d.getId() + " finalPrice=" + d.getFinalPrice()));
+
+        return dtos;
     }
     public ProductDto getProductById(Long id) {
         Product p = productRepository.findById(id)

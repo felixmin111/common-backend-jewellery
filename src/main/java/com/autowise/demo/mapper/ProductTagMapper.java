@@ -6,6 +6,7 @@ import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.springframework.web.bind.annotation.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface ProductTagMapper {
