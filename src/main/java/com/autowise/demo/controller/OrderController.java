@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
@@ -23,5 +25,9 @@ public class OrderController {
     @GetMapping("/{id}")
     public OrderDto getById(@PathVariable Long id) {
         return orderService.getById(id);
+    }
+    @GetMapping
+    public List<OrderDto> getAll() {
+        return orderService.getAll();
     }
 }

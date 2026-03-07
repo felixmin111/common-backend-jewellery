@@ -60,7 +60,7 @@ public class InvoiceService {
             subTotal = subTotal.add(it.getSellingPrice().multiply(BigDecimal.valueOf(it.getQty())));
         }
 
-        // ✅ 2) discount logic (supports amount OR percentage)
+        // ✅ 2) discount logic (amount OR percentage)
         BigDecimal discountAmount = BigDecimal.ZERO;
 
         if (req.getDiscountAmount() != null) {
@@ -76,24 +76,12 @@ public class InvoiceService {
         BigDecimal finalPrice = subTotal.subtract(discountAmount);
         if (finalPrice.compareTo(BigDecimal.ZERO) < 0) finalPrice = BigDecimal.ZERO;
 
-        // ✅ 3) save invoice first
-        Invoice inv = new Invoice();
-        inv.setInvoiceNo(invoiceNoGenerator.nextInvoiceNo());
-        inv.setCustomerId(req.getCustomerId());
-        inv.setSubTotal(subTotal);
-        inv.setDiscountAmount(discountAmount);
-        inv.setDiscountPercentage(req.getDiscountPercentage());
-        inv.setFinalPrice(finalPrice);
-        inv.setStatus(normalizeStatus(req.getStatus()));
-
-        Invoice saved = invoiceRepo.save(inv);
-
-        // ✅ 4) subtract product qty
+        // ✅ 3) DEDUCT STOCK FIRST (important)
         for (var it : req.getItems()) {
             Product product = productRepo.findById(it.getProductId())
                     .orElseThrow(() -> new IllegalArgumentException("Product not found: " + it.getProductId()));
 
-            long currentQty = product.getQty() == null ? 0 : product.getQty();
+            long currentQty = product.getQty() == null ? 0L : product.getQty();
             long buyQty = it.getQty();
 
             if (buyQty > currentQty) {
@@ -104,18 +92,29 @@ public class InvoiceService {
             }
 
             long newQty = currentQty - buyQty;
+            product.setQty(newQty);
 
             if (newQty <= 0) {
                 product.setQty(0L);
                 product.setStockStatus("OUT_OF_STOCK");
             } else {
-                product.setQty(newQty);
-                // optional: keep your old status if you want
                 product.setStockStatus("IN_STOCK");
             }
 
             productRepo.save(product);
         }
+
+        // ✅ 4) save invoice
+        Invoice inv = new Invoice();
+        inv.setInvoiceNo(invoiceNoGenerator.nextInvoiceNo());
+        inv.setCustomerId(req.getCustomerId());
+        inv.setSubTotal(subTotal);
+        inv.setDiscountAmount(discountAmount);
+        inv.setDiscountPercentage(req.getDiscountPercentage());
+        inv.setFinalPrice(finalPrice);
+        inv.setStatus(normalizeStatus(req.getStatus()));
+
+        Invoice saved = invoiceRepo.save(inv);
 
         // ✅ 5) save purchase items
         for (var it : req.getItems()) {

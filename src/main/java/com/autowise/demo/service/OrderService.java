@@ -16,6 +16,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -163,6 +165,12 @@ public class OrderService {
 
         Order saved = orderRepo.save(order);
         return mapper.toDto(saved);
+    }
+    public List<OrderDto> getAll() {
+        return orderRepo.findAll()
+                .stream()
+                .map(mapper::toDto)
+                .toList();
     }
 
     public OrderDto getById(Long id) {

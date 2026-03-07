@@ -31,15 +31,8 @@ public class ProductService {
     private final JewelryTypeRepository jewelryTypeRepository;
 
     public List<ProductDto> getAll() {
-        List<Product> products = productRepository.findAll();
-
-        products.forEach(p ->
-                System.out.println("DB finalPrice = " + p.getFinalPrice())
-        );
-
-        return products.stream()
-                .map(productMapper::toDto)
-                .toList();
+        List<Product> products = productRepository.findAllWithDetails();
+        return products.stream().map(productMapper::toDto).toList();
     }
 
     public ProductDto getById(Long id) {
@@ -158,7 +151,7 @@ public class ProductService {
         }
     }
     public List<ProductDto> getProductsByTypeId(Long typeId) {
-        List<Product> list = productRepository.findByProductTypeId(typeId);
+        List<Product> list = productRepository.findByProductTypeIdWithDetails(typeId);
 
         list.forEach(p -> System.out.println("ENTITY id=" + p.getId() + " finalPrice=" + p.getFinalPrice()));
 
