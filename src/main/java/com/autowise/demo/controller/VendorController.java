@@ -1,6 +1,7 @@
 package com.autowise.demo.controller;
 
 import com.autowise.demo.dto.VendorDto;
+import com.autowise.demo.dto.VendorInvoiceLookupDto;
 import com.autowise.demo.service.VendorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -44,5 +45,9 @@ public class VendorController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         vendorService.delete(id);
+    }
+    @GetMapping("/invoice/{invoiceNo}")
+    public VendorInvoiceLookupDto getInvoiceForBuyback(@PathVariable String invoiceNo) {
+        return vendorService.findInvoiceForBuyback(invoiceNo);
     }
 }

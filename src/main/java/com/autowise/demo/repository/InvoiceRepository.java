@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 
@@ -39,4 +40,5 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
       order by function('date', i.createdAt)
     """)
     List<Object[]> dailySalesBetween(LocalDateTime start, LocalDateTime end);
+    Optional<Invoice> findByInvoiceNo(String invoiceNo);
 }

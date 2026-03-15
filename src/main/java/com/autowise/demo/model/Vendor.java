@@ -15,34 +15,24 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Vendor {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="buyback_base_price", precision = 12, scale = 2)
-    private BigDecimal buybackBasePrice;
+    @Column(name = "invoice_id", nullable = false)
+    private Long invoiceId;
 
-    @Column(name="deduction_rate", precision = 12, scale = 2)
-    private BigDecimal deductionRate;
-
-    @Column(name="\"desc\"", length = 500, nullable = false)
-    private String desc;
-
-    @Column(name="buyback_price", precision = 12, scale = 2)
-    private BigDecimal buybackPrice;
-
-    @Column(name="buyback_date")
-    private LocalDate buybackDate;
-
-    @Column(name="customer_id")
+    @Column(name = "customer_id", nullable = false)
     private Long customerId;
 
-    @Column(name="gold_price_id")
-    private Long goldPriceId;
+    @Column(name = "\"desc\"", length = 500, nullable = false)
+    private String desc;
 
-    @Column(name="deduction_amount", precision = 12, scale = 2)
-    private BigDecimal deductionAmount;
+    @Column(name = "buyback_date")
+    private LocalDate buybackDate;
+
+    @Column(name = "total_buyback_price", precision = 12, scale = 2)
+    private BigDecimal totalBuybackPrice;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
