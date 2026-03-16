@@ -6,5 +6,5 @@ public enum GoldPurity {
     K18,
     K16,
     K14,
-    K13
+    K12
 }
