@@ -159,6 +159,8 @@ public class InvoiceService {
         String x = s.trim().toUpperCase();
         if (x.equals("DRAFT")) return "DRAFT";
         if (x.equals("CONFIRMED") || x.equals("CONFIRM")) return "CONFIRMED";
+
+
         return "DRAFT";
     }
 }
