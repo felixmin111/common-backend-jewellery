@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -32,7 +33,7 @@ public class ProductDto {
 
     private Long qty;
 
-    private Float finalPrice;
+    private BigDecimal finalPrice;
 
     @Size(max = 50, message = "Collection must be at most 50 characters")
     private String collection;

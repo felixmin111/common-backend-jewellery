@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -48,7 +49,7 @@ public class ProductService {
         validateGoldWeightsForCreate(request.getProductGolds());
 
         Product entity = productMapper.toEntity(request);
-        if (request.getFinalPrice() == null || request.getFinalPrice() <= 0) {
+        if (request.getFinalPrice() == null || request.getFinalPrice().compareTo(BigDecimal.ZERO) <= 0) {
             throw new RuntimeException("Final price is required.");
         }
         entity.setFinalPrice(request.getFinalPrice());
@@ -68,7 +69,7 @@ public class ProductService {
         // ✅ VALIDATE productTypeId -> JewelryType exists
         validateProductTypeId(request.getProductTypeId());
         validateGoldWeightsForUpdate(id, request.getProductGolds());
-        if (request.getFinalPrice() == null || request.getFinalPrice() <= 0) {
+        if (request.getFinalPrice() == null || request.getFinalPrice().compareTo(BigDecimal.ZERO) <= 0) {
             throw new RuntimeException("Final price is required.");
         }
         existing.setFinalPrice(request.getFinalPrice());
