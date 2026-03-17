@@ -3,6 +3,7 @@ package com.autowise.demo.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -64,7 +65,7 @@ public class Product {
     private Long productTypeId;
 
     @Column(precision = 15, scale = 2,name = "final_price")
-    private Float finalPrice;
+    private BigDecimal finalPrice;
 
     // ✅ NEW: read-only relation using SAME column (doesn't break your code)
     @ManyToOne(fetch = FetchType.LAZY)
