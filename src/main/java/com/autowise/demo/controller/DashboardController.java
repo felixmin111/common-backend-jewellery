@@ -1,4 +1,5 @@
 package com.autowise.demo.controller;
+
 import com.autowise.demo.dto.DashboardDto;
 import com.autowise.demo.service.DashboardService;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +15,23 @@ public class DashboardController {
 
     @GetMapping
     public DashboardDto get(
-            @RequestParam(defaultValue = "7") int days,
+            @RequestParam(defaultValue = "month") String filterType,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate,
+            @RequestParam(required = false) String month,
+            @RequestParam(required = false) Integer year,
             @RequestParam(defaultValue = "3") long lowStockThreshold
     ) {
-        return dashboardService.getDashboard(days, lowStockThreshold);
+        System.out.println("filterType = " + filterType);
+        System.out.println("startDate = " + startDate);
+        System.out.println("endDate = " + endDate);
+        return dashboardService.getDashboard(
+                filterType,
+                startDate,
+                endDate,
+                month,
+                year,
+                lowStockThreshold
+        );
     }
 }

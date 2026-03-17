@@ -16,24 +16,33 @@ public class DashboardDto {
     private long purchasesToday;
     private long lowStockCount;
 
-    private List<SalesPoint> salesTrend;     // line chart
-    private List<TopProduct> topProducts;    // bar chart
-    private List<LowStockItem> lowStock;     // table
+    private List<SalesPoint> salesTrend;
+    private List<TopProduct> topProducts;
+    private List<LowStockItem> lowStock;
 
-    @Data @AllArgsConstructor @NoArgsConstructor @Builder
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
     public static class SalesPoint {
-        private String day; // "2026-03-03"
+        private String day;
         private BigDecimal total;
     }
 
-    @Data @AllArgsConstructor @NoArgsConstructor @Builder
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
     public static class TopProduct {
         private Long productId;
         private String productName;
         private Long qty;
     }
 
-    @Data @AllArgsConstructor @NoArgsConstructor @Builder
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
     public static class LowStockItem {
         private Long id;
         private String name;
