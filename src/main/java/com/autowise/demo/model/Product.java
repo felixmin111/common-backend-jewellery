@@ -64,6 +64,9 @@ public class Product {
     @Column(name = "product_type_id")
     private Long productTypeId;
 
+    @Column(name = "reference_price", precision = 15, scale = 2)
+    private BigDecimal referencePrice;
+
     @Column(precision = 15, scale = 2,name = "final_price")
     private BigDecimal finalPrice;
 

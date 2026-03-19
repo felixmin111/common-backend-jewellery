@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.fasterxml.jackson.datatype.jsr310.DecimalUtils.toBigDecimal;
+
 @Service
 @RequiredArgsConstructor
 public class DashboardService {
@@ -24,6 +26,23 @@ public class DashboardService {
     private final InvoiceRepository invoiceRepo;
     private final PurchaseItemRepository purchaseRepo;
     private final ProductRepository productRepo;
+    private BigDecimal toBigDecimal(Object[] row, int index) {
+        if (row == null || row.length <= index || row[index] == null) {
+            return BigDecimal.ZERO;
+        }
+
+        Object value = row[index];
+
+        if (value instanceof BigDecimal bd) {
+            return bd;
+        }
+
+        if (value instanceof Number n) {
+            return BigDecimal.valueOf(n.doubleValue());
+        }
+
+        return new BigDecimal(String.valueOf(value));
+    }
 
     @Transactional
     public DashboardDto getDashboard(
@@ -75,6 +94,12 @@ public class DashboardService {
         BigDecimal periodSales = invoiceRepo.sumConfirmedSalesBetween(from, to);
         long purchasesCount = invoiceRepo.countConfirmedBetween(from, to);
         long lowStockCount = productRepo.countByQtyLessThanEqual(lowStockThreshold);
+        List<Object[]> salesCostProfitRows = purchaseRepo.salesCostProfitBetween(from, to);
+        Object[] salesCostProfitRow = salesCostProfitRows.isEmpty() ? null : salesCostProfitRows.get(0);
+
+        BigDecimal totalSales = toBigDecimal(salesCostProfitRow, 0);
+        BigDecimal totalCost = toBigDecimal(salesCostProfitRow, 1);
+        BigDecimal totalProfit = toBigDecimal(salesCostProfitRow, 2);
 
         List<Object[]> trendRows = invoiceRepo.dailySalesBetween(from, to);
         List<DashboardDto.SalesPoint> trend = trendRows.stream()
@@ -117,6 +142,8 @@ public class DashboardService {
                 .monthSales(periodSales != null ? periodSales : BigDecimal.ZERO)
                 .purchasesToday(purchasesCount)
                 .lowStockCount(lowStockCount)
+                .totalCost(totalCost)
+                .totalProfit(totalProfit)
                 .salesTrend(trend)
                 .topProducts(top)
                 .lowStock(lowStock)

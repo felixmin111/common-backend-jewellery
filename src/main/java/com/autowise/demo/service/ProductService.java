@@ -53,6 +53,10 @@ public class ProductService {
             throw new RuntimeException("Final price is required.");
         }
         entity.setFinalPrice(request.getFinalPrice());
+        if (request.getReferencePrice() == null || request.getReferencePrice().compareTo(BigDecimal.ZERO) < 0) {
+            throw new RuntimeException("Reference price is required.");
+        }
+        entity.setReferencePrice(request.getReferencePrice());
 
         applyGoldRows(entity, request.getProductGolds());
         applyJewelleryRows(entity, request.getProductJewellerys());
@@ -73,6 +77,11 @@ public class ProductService {
             throw new RuntimeException("Final price is required.");
         }
         existing.setFinalPrice(request.getFinalPrice());
+        existing.setReferencePrice(request.getReferencePrice());
+        if (request.getFinalPrice() == null || request.getFinalPrice().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new RuntimeException("Final price is required.");
+        }
+
         System.out.println("finalPrice = " + request.getFinalPrice());
 
         productMapper.updateEntityFromDto(request, existing);

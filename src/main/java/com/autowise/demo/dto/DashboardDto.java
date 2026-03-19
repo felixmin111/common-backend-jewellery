@@ -15,6 +15,8 @@ public class DashboardDto {
     private BigDecimal monthSales;
     private long purchasesToday;
     private long lowStockCount;
+    private BigDecimal totalCost;
+    private BigDecimal totalProfit;
 
     private List<SalesPoint> salesTrend;
     private List<TopProduct> topProducts;

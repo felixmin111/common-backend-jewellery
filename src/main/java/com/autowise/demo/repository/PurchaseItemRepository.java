@@ -22,4 +22,18 @@ public interface PurchaseItemRepository extends JpaRepository<PurchaseItem, Long
       order by coalesce(sum(pi.qty), 0) desc
     """)
     List<Object[]> topProductsByQty(LocalDateTime start, LocalDateTime end);
+
+    @Query("""
+  select
+    coalesce(sum(pi.qty * pi.sellingPrice), 0),
+    coalesce(sum(pi.qty * p.referencePrice), 0),
+    coalesce(sum(pi.qty * (pi.sellingPrice - p.referencePrice)), 0)
+  from PurchaseItem pi
+  join pi.invoice inv
+  join Product p on p.id = pi.productId
+  where inv.status = 'CONFIRMED'
+    and inv.createdAt >= :start
+    and inv.createdAt < :end
+""")
+    List<Object[]> salesCostProfitBetween(LocalDateTime start, LocalDateTime end);
 }

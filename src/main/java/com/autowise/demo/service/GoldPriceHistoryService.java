@@ -58,9 +58,24 @@ public class GoldPriceHistoryService {
         GoldPriceHistory entity = repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Gold price not found"));
 
+        if (dto.getPurity() == null) {
+            throw new RuntimeException("purity is required");
+        }
+
+        if (dto.getRecordDate() == null) {
+            throw new RuntimeException("recordDate is required");
+        }
+
         mapper.updateEntityFromDto(dto, entity);
 
-        return mapper.toDto(entity);
+        // if edited record is ACTIVE, make other ACTIVE records
+        // of the same purity become INACTIVE
+        if (entity.getStatus() == GoldPriceStatus.ACTIVE) {
+            repo.deactivateOtherActiveByPurity(entity.getPurity(), entity.getId());
+        }
+
+        GoldPriceHistory saved = repo.save(entity);
+        return mapper.toDto(saved);
     }
 
     // DELETE (optional)

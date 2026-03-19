@@ -22,4 +22,17 @@ public interface GoldPriceHistoryRepository extends JpaRepository<GoldPriceHisto
            and g.status = com.autowise.demo.model.enums.GoldPriceStatus.ACTIVE
     """)
     int deactivateActiveByPurity(@org.springframework.data.repository.query.Param("purity") GoldPurity purity);
+
+    @org.springframework.data.jpa.repository.Modifying
+    @org.springframework.data.jpa.repository.Query("""
+        update GoldPriceHistory g
+           set g.status = com.autowise.demo.model.enums.GoldPriceStatus.INACTIVE
+         where g.purity = :purity
+           and g.status = com.autowise.demo.model.enums.GoldPriceStatus.ACTIVE
+           and g.id <> :id
+    """)
+    int deactivateOtherActiveByPurity(
+            @org.springframework.data.repository.query.Param("purity") GoldPurity purity,
+            @org.springframework.data.repository.query.Param("id") Long id
+    );
 }

@@ -19,6 +19,7 @@ public interface ProductMapper {
     @Mapping(target = "productGolds", ignore = true)
     @Mapping(target = "productJewellerys", ignore = true)
     @Mapping(target = "productImages", ignore = true)
+    @Mapping(target = "referencePrice", source = "referencePrice")
     Product toEntity(ProductDto dto);
 
     // ✅ Entity -> DTO: map collections manually
@@ -34,6 +35,7 @@ public interface ProductMapper {
     @Mapping(target = "productJewellerys", ignore = true)
     @Mapping(target = "productImages", ignore = true)
     @Mapping(target="finalPrice", source="finalPrice")
+    @Mapping(target = "referencePrice", source = "referencePrice")
     void updateEntityFromDto(ProductDto dto, @MappingTarget Product entity);
 
     // ---------------- helpers ----------------
