@@ -13,6 +13,9 @@ public interface GoldPriceHistoryRepository extends JpaRepository<GoldPriceHisto
     Optional<GoldPriceHistory> findByPurityAndStatus(GoldPurity purity, GoldPriceStatus status);
 
     List<GoldPriceHistory> findAllByOrderByRecordDateDesc();
+    Optional<GoldPriceHistory> findTopByPurityOrderByRecordDateDescIdDesc(GoldPurity purity);
+
+    Optional<GoldPriceHistory> findTopByPurityAndIdNotOrderByRecordDateDescIdDesc(GoldPurity purity, Long id);
 
     @org.springframework.data.jpa.repository.Modifying
     @org.springframework.data.jpa.repository.Query("""

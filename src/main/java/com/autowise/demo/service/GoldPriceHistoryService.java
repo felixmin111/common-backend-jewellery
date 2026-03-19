@@ -42,12 +42,19 @@ public class GoldPriceHistoryService {
         if (dto.getPurity() == null) throw new RuntimeException("purity is required");
         if (dto.getRecordDate() == null) throw new RuntimeException("recordDate is required");
 
-        // ✅ 1) Deactivate only SAME purity ACTIVE record(s)
-        repo.deactivateActiveByPurity(dto.getPurity());
+        GoldPriceHistory latest = repo.findTopByPurityOrderByRecordDateDescIdDesc(dto.getPurity()).orElse(null);
 
-        // ✅ 2) Create new ACTIVE record (for that purity)
         GoldPriceHistory entity = mapper.toEntity(dto);
-        entity.setStatus(GoldPriceStatus.ACTIVE);
+
+        boolean shouldBeActive =
+                latest == null || !dto.getRecordDate().isBefore(latest.getRecordDate());
+
+        if (shouldBeActive) {
+            repo.deactivateActiveByPurity(dto.getPurity());
+            entity.setStatus(GoldPriceStatus.ACTIVE);
+        } else {
+            entity.setStatus(GoldPriceStatus.INACTIVE);
+        }
 
         GoldPriceHistory saved = repo.save(entity);
         return mapper.toDto(saved);
@@ -68,10 +75,18 @@ public class GoldPriceHistoryService {
 
         mapper.updateEntityFromDto(dto, entity);
 
-        // if edited record is ACTIVE, make other ACTIVE records
-        // of the same purity become INACTIVE
-        if (entity.getStatus() == GoldPriceStatus.ACTIVE) {
+        GoldPriceHistory latestOther = repo
+                .findTopByPurityAndIdNotOrderByRecordDateDescIdDesc(entity.getPurity(), entity.getId())
+                .orElse(null);
+
+        boolean shouldBeActive =
+                latestOther == null || !entity.getRecordDate().isBefore(latestOther.getRecordDate());
+
+        if (shouldBeActive) {
             repo.deactivateOtherActiveByPurity(entity.getPurity(), entity.getId());
+            entity.setStatus(GoldPriceStatus.ACTIVE);
+        } else {
+            entity.setStatus(GoldPriceStatus.INACTIVE);
         }
 
         GoldPriceHistory saved = repo.save(entity);
