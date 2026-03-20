@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -29,4 +31,24 @@ public class AuthController {
         UserDto response = authService.login(request);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> req) {
+        authService.forgotPassword(req.get("email"));
+        return ResponseEntity.ok("Email sent");
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody Map<String, String> req) {
+
+        String token = req.get("token");
+        String password = req.get("password");
+
+        authService.resetPassword(token, password);
+
+        return ResponseEntity.ok("Password updated");
+
+    }
+
+
 }
