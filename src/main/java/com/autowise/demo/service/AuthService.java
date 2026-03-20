@@ -4,18 +4,20 @@ import com.autowise.demo.dto.AdminRegisterDto;
 import com.autowise.demo.dto.LoginDto;
 import com.autowise.demo.dto.UserDto;
 import com.autowise.demo.mapper.UserMapper;
+import com.autowise.demo.model.PasswordResetToken;
 import com.autowise.demo.model.User;
+import com.autowise.demo.repository.PasswordResetTokenRepository;
 import com.autowise.demo.repository.UserRepository;
 import com.autowise.demo.security.JwtService;
+
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import com.autowise.demo.model.PasswordResetToken;
-import com.autowise.demo.repository.PasswordResetTokenRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -33,9 +35,13 @@ public class AuthService {
     private final PasswordResetTokenRepository tokenRepository;
     private final EmailSenderService emailSenderService;
 
+    // 🔥 ADD THIS (IMPORTANT)
+    @Value("${app.frontend.url}")
+    private String frontendUrl;
+
+    // ✅ USER REGISTER (GMAIL ONLY)
     public void register(UserDto request) {
 
-        // 🔥 CHECK GMAIL
         if (!request.getEmail().endsWith("@gmail.com")) {
             throw new RuntimeException("Only Gmail is allowed");
         }
@@ -57,7 +63,7 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    // ✅ admin register (ADMIN only should call this)
+    // ✅ ADMIN REGISTER (NO RESTRICTION)
     public void registerAdmin(AdminRegisterDto request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email already in use");
@@ -73,6 +79,7 @@ public class AuthService {
         userRepository.save(admin);
     }
 
+    // ✅ LOGIN
     public UserDto login(LoginDto request) {
 
         authenticationManager.authenticate(
@@ -94,19 +101,14 @@ public class AuthService {
         String token = jwtService.generateToken(userDetails);
 
         UserDto userDto = userMapper.toDto(user);
-
-        // ✅ Option A: set role manually
         userDto.setRole(user.getRole());
-
-        // ✅ set token
         userDto.setToken(token);
-
-        // ✅ do not return password
         userDto.setPassword(null);
 
         return userDto;
     }
 
+    // 🔥 FORGOT PASSWORD
     public void forgotPassword(String email) {
 
         User user = userRepository.findByEmail(email)
@@ -121,7 +123,8 @@ public class AuthService {
 
         tokenRepository.save(resetToken);
 
-        String link = "http://localhost:5173/reset-password?token=" + token;
+        // 🔥 PRODUCTION LINK
+        String link = frontendUrl + "/reset-password?token=" + token;
 
         emailSenderService.sendEmail(
                 email,
@@ -134,6 +137,7 @@ public class AuthService {
         );
     }
 
+    // 🔥 RESET PASSWORD
     @Transactional
     public void resetPassword(String token, String newPassword) {
 
@@ -147,15 +151,11 @@ public class AuthService {
         User user = userRepository.findByEmail(resetToken.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // 🔥 CRITICAL LINE
         user.setHashPassword(passwordEncoder.encode(newPassword));
-
         userRepository.save(user);
 
         tokenRepository.delete(resetToken);
 
-        System.out.println(user.getHashPassword());
         System.out.println("Password updated for: " + user.getEmail());
     }
-
 }
